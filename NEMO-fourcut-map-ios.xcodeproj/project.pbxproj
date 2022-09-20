@@ -7,20 +7,22 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		956C51CBB8F7804D77FDCA49 /* Pods_NEMO_fourcut_map_ios.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 83F699E0D52B8D88D3B84492 /* Pods_NEMO_fourcut_map_ios.framework */; };
 		E64EEF5028D9EC1300D16321 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E64EEF4F28D9EC1300D16321 /* AppDelegate.swift */; };
 		E64EEF5228D9EC1300D16321 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E64EEF5128D9EC1300D16321 /* SceneDelegate.swift */; };
 		E64EEF5428D9EC1300D16321 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E64EEF5328D9EC1300D16321 /* ViewController.swift */; };
-		E64EEF5728D9EC1300D16321 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E64EEF5528D9EC1300D16321 /* Main.storyboard */; };
 		E64EEF5928D9EC1300D16321 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E64EEF5828D9EC1300D16321 /* Assets.xcassets */; };
 		E64EEF5C28D9EC1300D16321 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E64EEF5A28D9EC1300D16321 /* LaunchScreen.storyboard */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		1010DD97D2777E1E26EADC67 /* Pods-NEMO-fourcut-map-ios.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NEMO-fourcut-map-ios.debug.xcconfig"; path = "Target Support Files/Pods-NEMO-fourcut-map-ios/Pods-NEMO-fourcut-map-ios.debug.xcconfig"; sourceTree = "<group>"; };
+		83F699E0D52B8D88D3B84492 /* Pods_NEMO_fourcut_map_ios.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_NEMO_fourcut_map_ios.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		91C052221BBEB7CF66C2E070 /* Pods-NEMO-fourcut-map-ios.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NEMO-fourcut-map-ios.release.xcconfig"; path = "Target Support Files/Pods-NEMO-fourcut-map-ios/Pods-NEMO-fourcut-map-ios.release.xcconfig"; sourceTree = "<group>"; };
 		E64EEF4C28D9EC1300D16321 /* NEMO-fourcut-map-ios.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "NEMO-fourcut-map-ios.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		E64EEF4F28D9EC1300D16321 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		E64EEF5128D9EC1300D16321 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
 		E64EEF5328D9EC1300D16321 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
-		E64EEF5628D9EC1300D16321 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		E64EEF5828D9EC1300D16321 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		E64EEF5B28D9EC1300D16321 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		E64EEF5D28D9EC1300D16321 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -31,17 +33,37 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				956C51CBB8F7804D77FDCA49 /* Pods_NEMO_fourcut_map_ios.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		B2714520593BA7DE89497EAF /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				83F699E0D52B8D88D3B84492 /* Pods_NEMO_fourcut_map_ios.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		D37D427CD1E031B2AC443BE0 /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				1010DD97D2777E1E26EADC67 /* Pods-NEMO-fourcut-map-ios.debug.xcconfig */,
+				91C052221BBEB7CF66C2E070 /* Pods-NEMO-fourcut-map-ios.release.xcconfig */,
+			);
+			path = Pods;
+			sourceTree = "<group>";
+		};
 		E64EEF4328D9EC1300D16321 = {
 			isa = PBXGroup;
 			children = (
 				E64EEF4E28D9EC1300D16321 /* NEMO-fourcut-map-ios */,
 				E64EEF4D28D9EC1300D16321 /* Products */,
+				D37D427CD1E031B2AC443BE0 /* Pods */,
+				B2714520593BA7DE89497EAF /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -59,7 +81,6 @@
 				E64EEF4F28D9EC1300D16321 /* AppDelegate.swift */,
 				E64EEF5128D9EC1300D16321 /* SceneDelegate.swift */,
 				E64EEF5328D9EC1300D16321 /* ViewController.swift */,
-				E64EEF5528D9EC1300D16321 /* Main.storyboard */,
 				E64EEF5828D9EC1300D16321 /* Assets.xcassets */,
 				E64EEF5A28D9EC1300D16321 /* LaunchScreen.storyboard */,
 				E64EEF5D28D9EC1300D16321 /* Info.plist */,
@@ -74,9 +95,11 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = E64EEF6028D9EC1300D16321 /* Build configuration list for PBXNativeTarget "NEMO-fourcut-map-ios" */;
 			buildPhases = (
+				DED75E809F77A76B763B3200 /* [CP] Check Pods Manifest.lock */,
 				E64EEF4828D9EC1300D16321 /* Sources */,
 				E64EEF4928D9EC1300D16321 /* Frameworks */,
 				E64EEF4A28D9EC1300D16321 /* Resources */,
+				C76371EA5E359DEBAA4EE6A8 /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -127,11 +150,52 @@
 			files = (
 				E64EEF5C28D9EC1300D16321 /* LaunchScreen.storyboard in Resources */,
 				E64EEF5928D9EC1300D16321 /* Assets.xcassets in Resources */,
-				E64EEF5728D9EC1300D16321 /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		C76371EA5E359DEBAA4EE6A8 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-NEMO-fourcut-map-ios/Pods-NEMO-fourcut-map-ios-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-NEMO-fourcut-map-ios/Pods-NEMO-fourcut-map-ios-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-NEMO-fourcut-map-ios/Pods-NEMO-fourcut-map-ios-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		DED75E809F77A76B763B3200 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-NEMO-fourcut-map-ios-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		E64EEF4828D9EC1300D16321 /* Sources */ = {
@@ -147,14 +211,6 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXVariantGroup section */
-		E64EEF5528D9EC1300D16321 /* Main.storyboard */ = {
-			isa = PBXVariantGroup;
-			children = (
-				E64EEF5628D9EC1300D16321 /* Base */,
-			);
-			name = Main.storyboard;
-			sourceTree = "<group>";
-		};
 		E64EEF5A28D9EC1300D16321 /* LaunchScreen.storyboard */ = {
 			isa = PBXVariantGroup;
 			children = (
@@ -282,6 +338,7 @@
 		};
 		E64EEF6128D9EC1300D16321 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 1010DD97D2777E1E26EADC67 /* Pods-NEMO-fourcut-map-ios.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
@@ -292,7 +349,6 @@
 				INFOPLIST_FILE = "NEMO-fourcut-map-ios/Info.plist";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
-				INFOPLIST_KEY_UIMainStoryboardFile = Main;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -310,6 +366,7 @@
 		};
 		E64EEF6228D9EC1300D16321 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 91C052221BBEB7CF66C2E070 /* Pods-NEMO-fourcut-map-ios.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
@@ -320,7 +377,6 @@
 				INFOPLIST_FILE = "NEMO-fourcut-map-ios/Info.plist";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
-				INFOPLIST_KEY_UIMainStoryboardFile = Main;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				LD_RUNPATH_SEARCH_PATHS = (
