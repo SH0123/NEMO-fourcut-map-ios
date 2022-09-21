@@ -6,12 +6,17 @@
 //
 
 import UIKit
-import SnapKit
+import CoreLocation
 import NMapsMap
+import SnapKit
 
 class ViewController: UIViewController {
     
-    private let mapView = NMFMapView()
+    private let mapView: UIView = {
+        let mapView = NMFMapView()
+        mapView.zoomLevel = 15
+        return mapView
+    }()
     private lazy var addressButton: UIButton = {
         let button = UIButton()
         button.setTitle("서울특별시 양천구 목동로 212", for: .normal)
@@ -37,7 +42,7 @@ class ViewController: UIViewController {
                                    backgroundColor: UIColor.brandPink,
                                    radius: 10,
                                    top: 8, left: 16, bottom: 8, right: 16)
-        //button.isHidden = true
+        button.isHidden = true
         return button
     }()
     private lazy var turnToListButton: UIButton = {
@@ -60,6 +65,10 @@ class ViewController: UIViewController {
     }
     
     // MARK: - configure
+    
+    private func configureDelegate() {
+        
+    }
     
     private func configureAddsubview() {
         view.addSubviews(
