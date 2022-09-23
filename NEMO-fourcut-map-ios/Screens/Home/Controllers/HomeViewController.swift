@@ -10,7 +10,7 @@ import CoreLocation
 import NMapsMap
 import SnapKit
 
-class ViewController: UIViewController {
+final class HomeViewController: UIViewController {
     
     private let mapView: UIView = {
         let mapView = NMFMapView()
@@ -40,9 +40,9 @@ class ViewController: UIViewController {
         button.titleLabel?.font = UIFont.contentsDefaultAccent
         button = button.setButtonProperty(
                                    backgroundColor: UIColor.brandPink,
-                                   radius: 10,
+                                   radius: 20,
                                    top: 8, left: 16, bottom: 8, right: 16)
-        button.isHidden = true
+        button.isHidden = false
         return button
     }()
     private lazy var turnToListButton: UIButton = {
@@ -93,7 +93,7 @@ class ViewController: UIViewController {
         researchButton.snp.makeConstraints {
             $0.top.equalTo(addressButton.snp.bottom).offset(8)
             $0.centerX.equalTo(addressButton.snp.centerX)
-            $0.height.equalTo(30)
+            $0.height.equalTo(40)
         }
     }
 }
