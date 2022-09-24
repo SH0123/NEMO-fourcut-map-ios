@@ -42,7 +42,7 @@ class HomeStoreCell: UICollectionViewCell {
     
     private let starLabel: UILabel = {
         let label = UILabel()
-        label.text = "0.0 (100명)"
+        label.text = "0.0 (0명)"
         label.font = UIFont.mini
         return label
     }()

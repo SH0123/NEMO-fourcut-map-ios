@@ -16,7 +16,8 @@ final class HomeViewController: UIViewController {
         static let minimumInterItem: CGFloat = 10
     }
     
-    private var storeList: [Int] = [1]
+    private var storeList: [Int] = [1, 2, 3, 4, 5]
+    private var currentPageIndex: CGFloat = 0
 
     private let mapView: UIView = {
         let mapView = NMFMapView()
@@ -132,6 +133,7 @@ final class HomeViewController: UIViewController {
     }
 }
 
+// MARK: - UICollectionViewDataSource
 extension HomeViewController: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         let count = storeList.isEmpty ? 1 : storeList.count
@@ -153,8 +155,31 @@ extension HomeViewController: UICollectionViewDataSource {
     }
 }
 
+// MARK: - UICollectionViewDelegateFlowLayout
+
 extension HomeViewController: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         return HomeStoreCell.itemSize
+    }
+}
+
+// MARK: - UIScrollViewDelegate
+
+extension HomeViewController: UIScrollViewDelegate {
+    func scrollViewWillEndDragging(_ scrollView: UIScrollView, withVelocity velocity: CGPoint, targetContentOffset: UnsafeMutablePointer<CGPoint>) {
+        let pageWidthIncludingSpace = HomeStoreCell.itemSize.width + Size.minimumInterItem
+        let offset = targetContentOffset.pointee.x
+        let index = (offset + Size.contentInset) / pageWidthIncludingSpace
+        var roundedIndex = round(index)
+        
+        if currentPageIndex < roundedIndex {
+            currentPageIndex += 1
+            roundedIndex = currentPageIndex
+        } else if currentPageIndex > roundedIndex {
+            currentPageIndex -= 1
+            roundedIndex = currentPageIndex
+        }
+        
+        targetContentOffset.pointee = CGPoint(x: roundedIndex * pageWidthIncludingSpace - Size.contentInset, y: 0)
     }
 }
