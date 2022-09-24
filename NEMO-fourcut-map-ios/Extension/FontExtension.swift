@@ -10,7 +10,7 @@ import UIKit
 
 extension UIFont {
     static let mainTitle = UIFont(name: "AppleSDGothicNeo-Bold", size: 25)
-    static let contentsTitle = UIFont(name: "AppleSDGothicNeo-SemiBold", size: 20)
+    static let contentsTitle = UIFont(name: "AppleSDGothicNeo-Bold", size: 20)
     static let contentsAccent = UIFont(name: "AppleSDGothicNeo-Medium", size: 16)
     static let contentsDefaultAccent = UIFont(name: "AppleSDGothicNeo-Medium", size: 14)
     static let contentsDefault = UIFont(name: "AppleSDGothicNeo-Medium", size: 14)

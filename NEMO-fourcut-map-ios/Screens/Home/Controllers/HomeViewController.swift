@@ -11,7 +11,13 @@ import NMapsMap
 import SnapKit
 
 final class HomeViewController: UIViewController {
+    enum Size {
+        static let contentInset: CGFloat = (UIScreen.main.bounds.width - HomeStoreCell.itemSize.width) / 2
+        static let minimumInterItem: CGFloat = 10
+    }
     
+    private var storeList: [Int] = [1]
+
     private let mapView: UIView = {
         let mapView = NMFMapView()
         mapView.zoomLevel = 15
@@ -40,11 +46,12 @@ final class HomeViewController: UIViewController {
         button.titleLabel?.font = UIFont.contentsDefaultAccent
         button = button.setButtonProperty(
                                    backgroundColor: UIColor.brandPink,
-                                   radius: 20,
+                                   radius: 15,
                                    top: 8, left: 16, bottom: 8, right: 16)
-        button.isHidden = false
+        button.isHidden = true
         return button
     }()
+    
     private lazy var turnToListButton: UIButton = {
         var button = UIButton()
         button.setTitle("목록 보기", for: .normal)
@@ -52,22 +59,36 @@ final class HomeViewController: UIViewController {
         button.titleLabel?.font = UIFont.contentsDefault
         button = button.setButtonProperty(
                                     backgroundColor: UIColor.white,
-                                   radius: 10,
+                                   radius: 15,
                                    top: 8, left: 16, bottom: 8, right: 16)
         return button
     }()
     
+    private let storeCollectionView: UICollectionView = {
+        let layout = UICollectionViewFlowLayout()
+        let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
+        layout.scrollDirection = .horizontal
+        collectionView.contentInset = UIEdgeInsets(top: 0, left: Size.contentInset, bottom: 0, right: Size.contentInset)
+        collectionView.register(HomeStoreCell.self, forCellWithReuseIdentifier: HomeStoreCell.registerId)
+        collectionView.register(HomeStoreEmptyCell.self, forCellWithReuseIdentifier: HomeStoreEmptyCell.registerId)
+        collectionView.showsHorizontalScrollIndicator = false
+        collectionView.backgroundColor = .clear
+        return collectionView
+    }()
+        
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .systemBackground
         configureAddsubview()
         configureConstraints()
+        configureDelegate()
     }
     
     // MARK: - configure
     
     private func configureDelegate() {
-        
+        storeCollectionView.dataSource = self
+        storeCollectionView.delegate = self
     }
     
     private func configureAddsubview() {
@@ -75,7 +96,8 @@ final class HomeViewController: UIViewController {
             mapView,
             addressButton,
             researchButton,
-            turnToListButton
+            turnToListButton,
+            storeCollectionView
         )
     }
     
@@ -95,6 +117,44 @@ final class HomeViewController: UIViewController {
             $0.centerX.equalTo(addressButton.snp.centerX)
             $0.height.equalTo(40)
         }
+        
+        storeCollectionView.snp.makeConstraints {
+            $0.left.right.equalToSuperview()
+            $0.height.equalTo(110)
+            $0.bottom.equalTo(view.safeAreaLayoutGuide).offset(-24)
+        }
+        
+        turnToListButton.snp.makeConstraints {
+            $0.bottom.equalTo(storeCollectionView.snp.top).offset(-10)
+            $0.height.equalTo(30)
+            $0.centerX.equalTo(researchButton)
+        }
     }
 }
 
+extension HomeViewController: UICollectionViewDataSource {
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        let count = storeList.isEmpty ? 1 : storeList.count
+        return count
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        if storeList.isEmpty {
+            guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: HomeStoreEmptyCell.registerId, for: indexPath) as? HomeStoreEmptyCell else { return HomeStoreEmptyCell() }
+            return cell
+        } else {
+            guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: HomeStoreCell.registerId, for: indexPath) as? HomeStoreCell else { return HomeStoreCell() }
+            return cell
+        }
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
+        return Size.minimumInterItem
+    }
+}
+
+extension HomeViewController: UICollectionViewDelegateFlowLayout {
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+        return HomeStoreCell.itemSize
+    }
+}
