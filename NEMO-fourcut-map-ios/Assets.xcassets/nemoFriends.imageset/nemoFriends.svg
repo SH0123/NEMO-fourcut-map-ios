@@ -1,0 +1,44 @@
+<svg width="351" height="256" viewBox="0 0 351 256" fill="none" xmlns="http://www.w3.org/2000/svg">
+<rect x="16.7047" y="3" width="81.5632" height="237.591" fill="#EF9FAE"/>
+<rect x="21.7709" y="9.95874" width="70.9245" height="46.723" fill="white"/>
+<rect x="21.7709" y="179.951" width="70.9245" height="46.723" fill="white"/>
+<rect x="21.7709" y="123.287" width="70.9245" height="46.723" fill="white"/>
+<rect x="21.7709" y="66.6228" width="70.9245" height="46.723" fill="white"/>
+<line y1="-0.776074" x2="18.6017" y2="-0.776074" transform="matrix(-0.354045 0.935228 -0.939555 -0.342399 39.502 236.615)" stroke="black" stroke-width="1.55215"/>
+<line y1="-0.776074" x2="18.4284" y2="-0.776074" transform="matrix(-0.329884 -0.944021 0.947809 -0.318838 82.5632 254.012)" stroke="black" stroke-width="1.55215"/>
+<ellipse cx="42.5416" cy="200.33" rx="3.03962" ry="2.98232" fill="black"/>
+<ellipse cx="73.4443" cy="200.33" rx="3.03962" ry="2.98232" fill="black"/>
+<path d="M49.6339 203.312V203.312C52.0756 210.937 62.8668 210.928 65.3386 203.312V203.312" stroke="black" stroke-width="1.55215"/>
+<path d="M22.2774 200.827L10.362 217.449M10.362 217.449V225.68M10.362 217.449L1 222.936" stroke="black" stroke-width="1.55215"/>
+<path d="M92.5767 203.227L109.199 215.142M109.199 215.142H117.429M109.199 215.142L114.686 224.504" stroke="black" stroke-width="1.55215"/>
+<ellipse cx="30.1298" cy="253.266" rx="5.82594" ry="2.73379" fill="#EF9FAE"/>
+<ellipse cx="79.2703" cy="253.266" rx="5.82594" ry="2.73379" fill="#EF9FAE"/>
+<rect x="133.468" y="2" width="80.3418" height="238.53" fill="#C5E3FF"/>
+<rect x="138.458" y="8.98633" width="69.8625" height="46.9076" fill="white"/>
+<rect x="138.458" y="179.65" width="69.8625" height="46.9076" fill="white"/>
+<rect x="138.458" y="122.762" width="69.8625" height="46.9076" fill="white"/>
+<rect x="138.458" y="65.8743" width="69.8625" height="46.9076" fill="white"/>
+<line x1="156.625" y1="236.799" x2="150.138" y2="254.265" stroke="black" stroke-width="1.49705"/>
+<line x1="197.632" y1="254.247" x2="191.644" y2="236.781" stroke="black" stroke-width="1.49705"/>
+<circle cx="158.918" cy="200.11" r="2.99411" fill="black"/>
+<circle cx="189.358" cy="200.11" r="2.99411" fill="black"/>
+<path d="M165.904 203.104V203.104C168.277 210.658 178.97 210.649 181.373 203.104V203.104" stroke="black" stroke-width="1.49705"/>
+<path d="M137.959 200.11L126.222 216.798M126.222 216.798V225.06M126.222 216.798L117 222.306" stroke="black" stroke-width="1.49705"/>
+<path d="M208.607 202.91L225.294 214.647M225.294 214.647H233.557M225.294 214.647L230.803 223.869" stroke="black" stroke-width="1.49705"/>
+<ellipse cx="146.692" cy="253.255" rx="5.7387" ry="2.7446" fill="#C5E3FF"/>
+<ellipse cx="195.096" cy="253.255" rx="5.7387" ry="2.7446" fill="#C5E3FF"/>
+<rect x="250.094" width="80.9745" height="240.409" fill="#293D82"/>
+<rect x="255.124" y="7.04126" width="70.4126" height="47.277" fill="white"/>
+<rect x="255.124" y="179.049" width="70.4126" height="47.277" fill="white"/>
+<rect x="255.124" y="121.713" width="70.4126" height="47.277" fill="white"/>
+<rect x="255.124" y="64.3772" width="70.4126" height="47.277" fill="white"/>
+<line x1="273.434" y1="236.648" x2="266.896" y2="254.251" stroke="black" stroke-width="1.50884"/>
+<line x1="314.764" y1="254.233" x2="308.728" y2="236.63" stroke="black" stroke-width="1.50884"/>
+<circle cx="275.745" cy="199.67" r="3.01768" fill="black"/>
+<circle cx="306.424" cy="199.67" r="3.01768" fill="black"/>
+<path d="M282.786 202.688V202.688C285.178 210.301 295.955 210.292 298.377 202.688V202.688" stroke="black" stroke-width="1.50884"/>
+<path d="M255.124 199.67L243.294 216.489M243.294 216.489V224.817M243.294 216.489L234 222.041" stroke="black" stroke-width="1.50884"/>
+<path d="M325.536 202.688L342.356 214.517M342.356 214.517H350.684M342.356 214.517L347.908 223.812" stroke="black" stroke-width="1.50884"/>
+<ellipse cx="263.422" cy="253.234" rx="5.78389" ry="2.76621" fill="#293D82"/>
+<ellipse cx="312.208" cy="253.234" rx="5.78389" ry="2.76621" fill="#293D82"/>
+</svg>

@@ -1,0 +1,16 @@
+<svg width="194" height="509" viewBox="0 0 194 509" fill="none" xmlns="http://www.w3.org/2000/svg">
+<rect x="33" width="161" height="478" fill="#57BEC1"/>
+<rect x="43" y="14" width="140" height="94" fill="white"/>
+<rect x="43" y="356" width="140" height="94" fill="white"/>
+<rect x="43" y="242" width="140" height="94" fill="white"/>
+<rect x="43" y="128" width="140" height="94" fill="white"/>
+<line x1="79.4061" y1="470.522" x2="66.4061" y2="505.522" stroke="black" stroke-width="3"/>
+<line x1="161.581" y1="505.486" x2="149.581" y2="470.487" stroke="black" stroke-width="3"/>
+<circle cx="84" cy="397" r="6" fill="black"/>
+<circle cx="145" cy="397" r="6" fill="black"/>
+<path d="M98 403V403C102.756 418.139 124.185 418.12 129 403V403" stroke="black" stroke-width="3"/>
+<path d="M43 397L19.48 430.442M19.48 430.442V447M19.48 430.442L1 441.481" stroke="black" stroke-width="3"/>
+<path d="M189 397L165.48 430.442M165.48 430.442V447M165.48 430.442L147 441.481" stroke="black" stroke-width="3"/>
+<ellipse cx="59.5" cy="503.5" rx="11.5" ry="5.5" fill="#FFDF00"/>
+<ellipse cx="156.5" cy="503.5" rx="11.5" ry="5.5" fill="#FFDF00"/>
+</svg>

@@ -2,6 +2,10 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>접근을 허용하고 주변의 네컷 사진관을 편하게 찾아보세요</string>
+	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
+	<string>접근을 허용하고 주변의 네컷 사진관을 편하게 찾아보세요</string>
 	<key>NMFClientId</key>
 	<string>a4lewfocku</string>
 	<key>UIApplicationSceneManifest</key>
