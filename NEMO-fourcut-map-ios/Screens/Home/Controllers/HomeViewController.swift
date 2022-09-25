@@ -74,6 +74,7 @@ final class HomeViewController: UIViewController {
         collectionView.register(HomeStoreEmptyCell.self, forCellWithReuseIdentifier: HomeStoreEmptyCell.registerId)
         collectionView.showsHorizontalScrollIndicator = false
         collectionView.backgroundColor = .clear
+        collectionView.decelerationRate = UIScrollView.DecelerationRate.fast
         return collectionView
     }()
         
