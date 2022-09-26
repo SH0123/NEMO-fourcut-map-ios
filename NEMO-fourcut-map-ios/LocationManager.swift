@@ -56,6 +56,8 @@ final class LocationManager: NSObject {
     }
 }
 
+// MARK: - CLLocationManagerDelegate
+
 extension LocationManager: CLLocationManagerDelegate {
     func locationManagerDidChangeAuthorization(_ manager: CLLocationManager) {
         checkUserLocationServiceAuthorization()
