@@ -16,12 +16,14 @@ final class HomeViewController: UIViewController {
         static let minimumInterItem: CGFloat = 10
     }
     
+    private let locationManager = LocationManager.shared 
     private var storeList: [Int] = [1, 2, 3, 4, 5]
     private var currentPageIndex: CGFloat = 0
 
-    private let mapView: UIView = {
+    private let mapView: NMFMapView = {
         let mapView = NMFMapView()
         mapView.zoomLevel = 15
+        mapView.positionMode = .compass
         return mapView
     }()
     private lazy var addressButton: UIButton = {
@@ -86,8 +88,18 @@ final class HomeViewController: UIViewController {
         configureDelegate()
     }
     
-    // MARK: - configure
+    // MARK: - closure
     
+    private lazy var locateUserLocation: (CLLocation) -> Void = { [weak self] location in
+        let camPosition = NMGLatLng(lat: location.coordinate.latitude, lng: location.coordinate.longitude)
+        let cameraUpdate = NMFCameraUpdate(scrollTo: camPosition)
+        cameraUpdate.animation = .easeIn
+        cameraUpdate.animationDuration = 0.5
+        self?.mapView.moveCamera(cameraUpdate)
+    }
+    
+    // MARK: - configure
+        
     private func configureDelegate() {
         storeCollectionView.dataSource = self
         storeCollectionView.delegate = self
@@ -133,8 +145,8 @@ final class HomeViewController: UIViewController {
         }
     }
 }
-
 // MARK: - UICollectionViewDataSource
+    
 extension HomeViewController: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         let count = storeList.isEmpty ? 1 : storeList.count
