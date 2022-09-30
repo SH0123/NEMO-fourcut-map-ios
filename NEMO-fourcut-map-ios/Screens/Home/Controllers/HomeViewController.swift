@@ -52,6 +52,7 @@ final class HomeViewController: UIViewController {
                                    backgroundColor: UIColor.brandPink,
                                    radius: 15,
                                    top: 8, left: 16, bottom: 8, right: 16)
+        button.addTarget(self, action: #selector(researchStores), for: .touchUpInside)
         button.isHidden = true
         return button
     }()
@@ -102,9 +103,10 @@ final class HomeViewController: UIViewController {
         configureAddsubview()
         configureConstraints()
         configureDelegate()
+        initMap()
     }
     
-    // MARK: - closure
+    // MARK: - closure & function
     
     private lazy var locateUserLocation: (CLLocation) -> Void = { [weak self] location in
         let camPosition = NMGLatLng(lat: location.coordinate.latitude, lng: location.coordinate.longitude)
@@ -115,12 +117,21 @@ final class HomeViewController: UIViewController {
         self?.mapView.moveCamera(cameraUpdate)
     }
     
+    private func initMap() {
+        mapView.addCameraDelegate(delegate: self)
+    }
+    
     // MARK: - objc function
     
     @objc private func moveCamera() {
         locationManager.settingLocationManager()
         guard let currentLocation = locationManager.getCurrentLocation() else { return }
         self.locateUserLocation(currentLocation)
+    }
+    
+    @objc private func researchStores() {
+        //TODO: store research 함수 내용 작성
+        researchButton.isHidden = true
     }
     
     // MARK: - configure
@@ -226,5 +237,14 @@ extension HomeViewController: UIScrollViewDelegate {
         }
         
         targetContentOffset.pointee = CGPoint(x: roundedIndex * pageWidthIncludingSpace - Size.contentInset, y: 0)
+    }
+}
+
+extension HomeViewController: NMFMapViewCameraDelegate {
+    func mapView(_ mapView: NMFMapView, cameraWillChangeByReason reason: Int, animated: Bool) {
+        if reason == NMFMapChangedByGesture {
+            researchButton.isHidden = false
+            //TODO: callback mapView.cameraPosition 받아서 사용
+        }
     }
 }
