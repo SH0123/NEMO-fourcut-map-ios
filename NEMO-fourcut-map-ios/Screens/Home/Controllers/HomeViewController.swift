@@ -14,6 +14,7 @@ final class HomeViewController: UIViewController {
     enum Size {
         static let contentInset: CGFloat = (UIScreen.main.bounds.width - HomeStoreCell.itemSize.width) / 2
         static let minimumInterItem: CGFloat = 10
+        static let layoutInset: CGFloat = 24
     }
     
     private let locationManager = LocationManager.shared 
@@ -67,6 +68,21 @@ final class HomeViewController: UIViewController {
         return button
     }()
     
+    private lazy var currentLocationButton: UIButton = {
+        let button = UIButton()
+        let imageConfig = UIImage.SymbolConfiguration(pointSize: 20)
+        button.setImage(ImageLiterals.currentLocation, for: .normal)
+        button.imageView?.tintColor = .brandPink
+        button.setPreferredSymbolConfiguration(imageConfig, forImageIn: .normal)
+        button.layer.applyShadow(alpha: 0.15, x: 0, y: 1)
+        button.layer.borderColor = UIColor.customGray?.cgColor
+        button.layer.borderWidth = 1
+        button.layer.cornerRadius = 20
+        button.backgroundColor = .white
+        button.addTarget(self, action: #selector(moveCamera), for: .touchUpInside)
+        return button
+    }()
+    
     private let storeCollectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
@@ -93,9 +109,18 @@ final class HomeViewController: UIViewController {
     private lazy var locateUserLocation: (CLLocation) -> Void = { [weak self] location in
         let camPosition = NMGLatLng(lat: location.coordinate.latitude, lng: location.coordinate.longitude)
         let cameraUpdate = NMFCameraUpdate(scrollTo: camPosition)
+        self?.mapView.zoomLevel = 15
         cameraUpdate.animation = .easeIn
         cameraUpdate.animationDuration = 0.5
         self?.mapView.moveCamera(cameraUpdate)
+    }
+    
+    // MARK: - objc function
+    
+    @objc private func moveCamera() {
+        locationManager.settingLocationManager()
+        guard let currentLocation = locationManager.getCurrentLocation() else { return }
+        self.locateUserLocation(currentLocation)
     }
     
     // MARK: - configure
@@ -111,6 +136,7 @@ final class HomeViewController: UIViewController {
             addressButton,
             researchButton,
             turnToListButton,
+            currentLocationButton,
             storeCollectionView
         )
     }
@@ -122,7 +148,7 @@ final class HomeViewController: UIViewController {
         
         addressButton.snp.makeConstraints {
             $0.top.equalTo(view.safeAreaLayoutGuide).offset(8)
-            $0.left.right.equalToSuperview().inset(24)
+            $0.left.right.equalToSuperview().inset(Size.layoutInset)
             $0.height.equalTo(44)
         }
         
@@ -135,13 +161,19 @@ final class HomeViewController: UIViewController {
         storeCollectionView.snp.makeConstraints {
             $0.left.right.equalToSuperview()
             $0.height.equalTo(110)
-            $0.bottom.equalTo(view.safeAreaLayoutGuide).offset(-24)
+            $0.bottom.equalTo(view.safeAreaLayoutGuide).offset(-Size.layoutInset)
         }
         
         turnToListButton.snp.makeConstraints {
             $0.bottom.equalTo(storeCollectionView.snp.top).offset(-10)
             $0.height.equalTo(30)
             $0.centerX.equalTo(researchButton)
+        }
+        
+        currentLocationButton.snp.makeConstraints {
+            $0.right.equalToSuperview().inset(Size.layoutInset)
+            $0.bottom.equalTo(storeCollectionView.snp.top).offset(-36)
+            $0.width.height.equalTo(40)
         }
     }
 }

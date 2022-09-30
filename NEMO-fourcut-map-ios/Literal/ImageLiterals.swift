@@ -18,7 +18,7 @@ enum ImageLiterals {
     static let selpixNemo = UIImage(named: "selpixNemo")
     static let signatureNemo = UIImage(named: "signatureNemo")
     
-    // MARK: - Icon
+    // MARK: - SF Symbol
     static let downArrow = UIImage(systemName: "chevron.down")
     static let notSelectedHeart = UIImage(systemName: "heart")
     static let selectedHeart = UIImage(systemName: "heart.fill")
@@ -31,4 +31,5 @@ enum ImageLiterals {
     static let filledCheckSquare = UIImage(systemName: "checkmark.square.fill")
     static let emptySelectRound = UIImage(systemName: "circle")
     static let filledSelectRound = UIImage(systemName: "record.circle")
+    static let currentLocation = UIImage(systemName: "location.fill")
 }

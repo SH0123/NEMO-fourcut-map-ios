@@ -31,7 +31,7 @@ final class LocationManager: NSObject {
     
     func getCurrentLocation() -> CLLocation? { return currentLocation }
     
-    private func settingLocationManager() {
+    func settingLocationManager() {
         if CLLocationManager.locationServicesEnabled() {
             if locationAuthorizationStatus == .notDetermined {
                 manager.requestWhenInUseAuthorization()
@@ -70,7 +70,6 @@ extension LocationManager: CLLocationManagerDelegate {
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
         manager.stopUpdatingLocation()
         guard let lastLocation = locations.last else { return }
-        locateCurrentLocation(lastLocation)
         currentLocation = lastLocation
     }
     
