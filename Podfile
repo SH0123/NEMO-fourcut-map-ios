@@ -6,6 +6,7 @@ target 'NEMO-fourcut-map-ios' do
   use_frameworks!
 
 pod 'NMapsMap'
+pod 'Alamofire'
 
   # Pods for NEMO-fourcut-map-ios
 

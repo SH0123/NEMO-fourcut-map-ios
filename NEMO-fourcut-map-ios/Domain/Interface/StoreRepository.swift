@@ -9,7 +9,6 @@ import Foundation
 
 protocol StoreRepository {
     /// 주변의 네컷 가게를 가져오는 함수
-    /// - Parameter
-    /// - Returns:내 주변의 네컷 가게
-    func getStore() -> Void
+    /// - Parameter completionHandler: 비동기 작업 이후 실행할 함수
+    func getStore(_ completionHandler: @escaping ([FourcutStore], Error?) -> Void)
 }
