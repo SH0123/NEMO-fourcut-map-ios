@@ -20,7 +20,6 @@ final class LocationManager: NSObject {
             }
         }
     }
-    var locateCurrentLocation: (CLLocation) -> Void = { _ in }
     var handleToAuthorizedState: () -> Void = { }
     
     override init() {
@@ -37,6 +36,7 @@ final class LocationManager: NSObject {
                 manager.requestWhenInUseAuthorization()
             } else if locationAuthorizationStatus == .authorizedAlways || locationAuthorizationStatus == .authorizedWhenInUse {
                 manager.startUpdatingLocation()
+                currentLocation = manager.location
             }
         }
     }
@@ -70,7 +70,6 @@ extension LocationManager: CLLocationManagerDelegate {
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
         manager.stopUpdatingLocation()
         guard let lastLocation = locations.last else { return }
-        locateCurrentLocation(lastLocation)
         currentLocation = lastLocation
     }
     

@@ -41,23 +41,25 @@ final class StoreKakaoMapRepository: StoreRepository {
     private var stores: [FourcutStore] = []
     private var error: Error?
     
-    func getAllStore(latitude x: String, longtitude y: String, _ completionHandler: @escaping ([FourcutStore], Error?) -> Void) {
+    private init() {}
+    
+    func getAllStores(longtitude x: Double, latitude y: Double, _ completionHandler: @escaping ([FourcutStore], Error?) -> Void) {
         let fetchingGroup = DispatchGroup()
-        fetchingGroup.enter()
         for store in NecutBrand.allCases {
             getEachStore(dispatchGroup: fetchingGroup,
                          storeName: store.rawKoreanString,
-                         latitude: x,
-                         longtitude: y)
+                         longtitude: String(x),
+                         latitude: String(y))
         }
         
-        fetchingGroup.notify(queue: .global()) {
+        fetchingGroup.notify(queue: .global()) { [weak self] in
+            guard let self = self else { return }
             completionHandler(self.stores, self.error)
         }
     }
     
-    private func getEachStore(dispatchGroup: DispatchGroup, storeName: String, latitude x: String, longtitude y: String) {
-        // TODO: 각각의 가게 정보 불러오기
+    private func getEachStore(dispatchGroup: DispatchGroup, storeName: String, longtitude x: String, latitude y: String) {
+        dispatchGroup.enter()
         let headers: HTTPHeaders = [
             "Authorization": "KakaoAK 7c09c34ede09a5c5ea55da86506a63bb"
         ]
