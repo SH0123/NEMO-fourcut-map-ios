@@ -85,10 +85,10 @@ final class HomeViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .systemBackground
-        getStores()
         configureAddsubview()
         configureConstraints()
         configureDelegate()
+        getStores()
     }
     
     // MARK: - closure & function
@@ -104,11 +104,14 @@ final class HomeViewController: UIViewController {
     private func getStores() {
         currentLocation = locationManager.getCurrentLocation()
         guard let x = currentLocation?.coordinate.longitude, let y = currentLocation?.coordinate.latitude else { return }
-        getAllStoresUseCase.getAllStores(longtitude: 37.576774566107, latitude: 126.98608594406) { [weak self] stores, error in
+        getAllStoresUseCase.getAllStores(longtitude: x, latitude:y) { [weak self] stores, error in
             guard let self = self else { return }
             guard error == nil else { return }
             self.storeList = stores
             print(self.storeList)
+            DispatchQueue.main.async {
+                self.storeCollectionView.reloadData()
+            }
         }
     }
     

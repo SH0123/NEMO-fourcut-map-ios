@@ -63,13 +63,14 @@ final class StoreKakaoMapRepository: StoreRepository {
         let headers: HTTPHeaders = [
             "Authorization": "KakaoAK 7c09c34ede09a5c5ea55da86506a63bb"
         ]
+        let radius = 10000
         let parameters: [String: Any] = [
                     "query": storeName,
                     "page": 1,
                     "size": 15,
                     "x": x,
                     "y": y,
-                    "radius": 1000
+                    "radius": radius
                 ]
         AF.request("https://dapi.kakao.com/v2/local/search/keyword.json", method: .get,
                    parameters: parameters, headers: headers)
