@@ -7,6 +7,8 @@
 
 import Foundation
 
+
+
 struct FourcutStore: Decodable {
     let id: String
     let addressName: String
@@ -25,10 +27,22 @@ struct FourcutStore: Decodable {
     }
 }
 
+extension FourcutStore {
+    var storeType: FourcutBrand? {
+        FourcutBrand(name: placeName)
+    }
+}
+
 struct Stores: Decodable {
     let all: [FourcutStore]
     
     enum CodingKeys: String, CodingKey {
         case all = "documents"
+    }
+}
+
+extension FourcutStore: CustomStringConvertible {
+    var description: String {
+        return "가게이름: \(addressName) "
     }
 }

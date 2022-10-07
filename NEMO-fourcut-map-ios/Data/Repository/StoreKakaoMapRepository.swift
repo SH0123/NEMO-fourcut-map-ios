@@ -8,33 +8,6 @@
 import Foundation
 import Alamofire
 
-enum NecutBrand: Int, CaseIterable {
-    case lifeFourcut
-    case haruFilm
-    case selpix
-    case photoSignature
-    case photoism
-    
-    var rawInt: Int {
-        return self.rawValue
-    }
-    
-    var rawKoreanString: String {
-        switch self {
-        case .lifeFourcut:
-            return "인생네컷"
-        case .haruFilm:
-            return "하루필름"
-        case .selpix:
-            return "셀픽스"
-        case .photoSignature:
-            return "포토시그니쳐"
-        case .photoism:
-            return "포토이즘"
-        }
-    }
-}
-
 final class StoreKakaoMapRepository: StoreRepository {
     
     static let shared = StoreKakaoMapRepository()
@@ -43,11 +16,11 @@ final class StoreKakaoMapRepository: StoreRepository {
     
     private init() {}
     
-    func getAllStores(longtitude x: Double, latitude y: Double, _ completionHandler: @escaping ([FourcutStore], Error?) -> Void) {
+    func getAllStores(longtitude x: Double, latitude y: Double, _ completionHandler: @escaping ([FourcutStore] , Error?) -> Void) {
         let fetchingGroup = DispatchGroup()
-        for store in NecutBrand.allCases {
+        for store in FourcutBrand.allCases {
             getEachStore(dispatchGroup: fetchingGroup,
-                         storeName: store.rawKoreanString,
+                         store: store,
                          longtitude: String(x),
                          latitude: String(y))
         }
@@ -58,14 +31,14 @@ final class StoreKakaoMapRepository: StoreRepository {
         }
     }
     
-    private func getEachStore(dispatchGroup: DispatchGroup, storeName: String, longtitude x: String, latitude y: String) {
+    private func getEachStore(dispatchGroup: DispatchGroup, store: FourcutBrand, longtitude x: String, latitude y: String) {
         dispatchGroup.enter()
         let headers: HTTPHeaders = [
             "Authorization": "KakaoAK 7c09c34ede09a5c5ea55da86506a63bb"
         ]
         let radius = 10000
         let parameters: [String: Any] = [
-                    "query": storeName,
+                    "query": store.rawKoreanString,
                     "page": 1,
                     "size": 15,
                     "x": x,
@@ -76,7 +49,7 @@ final class StoreKakaoMapRepository: StoreRepository {
                    parameters: parameters, headers: headers)
         .validate(statusCode: 200..<300)
         .responseDecodable(of: Stores.self) { response in
-            guard let fourcutStores = response.value?.all else { return }
+            guard var fourcutStores = response.value?.all else { return }
             self.stores += fourcutStores
             self.error = response.error
             dispatchGroup.leave()

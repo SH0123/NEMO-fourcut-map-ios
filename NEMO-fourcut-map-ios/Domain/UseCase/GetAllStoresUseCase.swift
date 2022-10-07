@@ -18,7 +18,7 @@ final class GetAllStoresUseCase {
     ///     - x: 현재 내 위치 경도
     ///     - y: 현재 내 위치 위도
     ///     - completion: ViewController에서 처리해줄 completionHandler
-    func getAllStores(longtitude x: Double, latitude y: Double, _ completionHandler: @escaping ([FourcutStore], Error?) -> Void) {
+    func getAllStores(longtitude x: Double, latitude y: Double, _ completionHandler: @escaping ([FourcutStore] , Error?) -> Void) {
         storeRepository.getAllStores(longtitude: x, latitude: y) { results, error in
             completionHandler(results, error)
         }

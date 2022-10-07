@@ -14,7 +14,7 @@ final class HomeViewController: UIViewController {
     enum Size {
         static let contentInset: CGFloat = (UIScreen.main.bounds.width - HomeStoreCell.itemSize.width) / 2
         static let minimumInterItem: CGFloat = 10
-    }
+    }    
     
     private let getAllStoresUseCase: GetAllStoresUseCase = GetAllStoresUseCase()
     private let locationManager = LocationManager.shared
@@ -41,7 +41,7 @@ final class HomeViewController: UIViewController {
         button.imageEdgeInsets = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 10)
         button.transform = CGAffineTransform(scaleX: -1.0, y: 1.0)
         button.titleLabel?.transform = CGAffineTransform(scaleX: -1.0, y: 1.0)
-        
+  
         return button
     }()
     private lazy var researchButton: UIButton = {
