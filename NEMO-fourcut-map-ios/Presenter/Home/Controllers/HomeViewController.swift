@@ -14,12 +14,14 @@ final class HomeViewController: UIViewController {
     enum Size {
         static let contentInset: CGFloat = (UIScreen.main.bounds.width - HomeStoreCell.itemSize.width) / 2
         static let minimumInterItem: CGFloat = 10
-    }
+    }    
     
-    private let locationManager = LocationManager.shared 
-    private var storeList: [Int] = [1, 2, 3, 4, 5]
+    private let getAllStoresUseCase: GetAllStoresUseCase = GetAllStoresUseCase()
+    private let locationManager = LocationManager.shared
+    private var storeList: [FourcutStore] = []
     private var currentPageIndex: CGFloat = 0
-
+    private var currentLocation: CLLocation?
+    
     private let mapView: NMFMapView = {
         let mapView = NMFMapView()
         mapView.zoomLevel = 15
@@ -39,7 +41,7 @@ final class HomeViewController: UIViewController {
         button.imageEdgeInsets = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 10)
         button.transform = CGAffineTransform(scaleX: -1.0, y: 1.0)
         button.titleLabel?.transform = CGAffineTransform(scaleX: -1.0, y: 1.0)
-        
+  
         return button
     }()
     private lazy var researchButton: UIButton = {
@@ -86,9 +88,10 @@ final class HomeViewController: UIViewController {
         configureAddsubview()
         configureConstraints()
         configureDelegate()
+        getStores()
     }
     
-    // MARK: - closure
+    // MARK: - closure & function
     
     private lazy var locateUserLocation: (CLLocation) -> Void = { [weak self] location in
         let camPosition = NMGLatLng(lat: location.coordinate.latitude, lng: location.coordinate.longitude)
@@ -96,6 +99,20 @@ final class HomeViewController: UIViewController {
         cameraUpdate.animation = .easeIn
         cameraUpdate.animationDuration = 0.5
         self?.mapView.moveCamera(cameraUpdate)
+    }
+    
+    private func getStores() {
+        currentLocation = locationManager.getCurrentLocation()
+        guard let x = currentLocation?.coordinate.longitude, let y = currentLocation?.coordinate.latitude else { return }
+        getAllStoresUseCase.getAllStores(longtitude: x, latitude:y) { [weak self] stores, error in
+            guard let self = self else { return }
+            guard error == nil else { return }
+            self.storeList = stores
+            print(self.storeList)
+            DispatchQueue.main.async {
+                self.storeCollectionView.reloadData()
+            }
+        }
     }
     
     // MARK: - configure

@@ -1,0 +1,16 @@
+<svg width="189" height="489" viewBox="0 0 189 489" fill="none" xmlns="http://www.w3.org/2000/svg">
+<rect x="31.3542" width="157.646" height="459.218" fill="black"/>
+<rect x="41.1458" y="13.45" width="137.083" height="90.3065" fill="white"/>
+<rect x="41.1458" y="342.012" width="137.083" height="90.3065" fill="white"/>
+<rect x="41.1458" y="232.491" width="137.083" height="90.3065" fill="white"/>
+<rect x="41.1458" y="122.97" width="137.083" height="90.3065" fill="white"/>
+<line y1="-1.5" x2="35.9535" y2="-1.5" transform="matrix(-0.354045 0.935228 -0.939555 -0.342399 75.4167 451.532)" stroke="black" stroke-width="3"/>
+<line y1="-1.5" x2="35.6186" y2="-1.5" transform="matrix(-0.329884 -0.944021 0.947809 -0.318838 158.646 485.157)" stroke="black" stroke-width="3"/>
+<ellipse cx="81.2917" cy="381.401" rx="5.875" ry="5.76424" fill="black"/>
+<ellipse cx="141.021" cy="381.401" rx="5.875" ry="5.76424" fill="black"/>
+<path d="M95 387.165V387.165C99.7193 401.903 120.577 401.884 125.354 387.165V387.165" stroke="black" stroke-width="3"/>
+<path d="M42.125 382.362L19.095 414.489M19.095 414.489V430.397M19.095 414.489L1 425.094" stroke="black" stroke-width="3"/>
+<path d="M182.146 382.362L159.116 414.489M159.116 414.489V430.397M159.116 414.489L141.021 425.094" stroke="black" stroke-width="3"/>
+<ellipse cx="57.3021" cy="483.716" rx="11.2604" ry="5.28389" fill="black"/>
+<ellipse cx="152.281" cy="483.716" rx="11.2604" ry="5.28389" fill="black"/>
+</svg>

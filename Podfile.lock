@@ -1,16 +1,20 @@
 PODS:
+  - Alamofire (5.6.2)
   - NMapsMap (3.16.0)
 
 DEPENDENCIES:
+  - Alamofire
   - NMapsMap
 
 SPEC REPOS:
   trunk:
+    - Alamofire
     - NMapsMap
 
 SPEC CHECKSUMS:
+  Alamofire: d368e1ff8a298e6dde360e35a3e68e6c610e7204
   NMapsMap: a2593320fca2bb09e521c05b4dffee4da42e96ed
 
-PODFILE CHECKSUM: 310e007b1bf20d1689ab66860effaf2882df2179
+PODFILE CHECKSUM: 93fdfbe85486e10ea963386ca86e1dac7ead273e
 
 COCOAPODS: 1.11.3
