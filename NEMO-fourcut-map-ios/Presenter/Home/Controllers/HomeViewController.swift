@@ -14,6 +14,7 @@ final class HomeViewController: UIViewController {
     enum Size {
         static let contentInset: CGFloat = (UIScreen.main.bounds.width - HomeStoreCell.itemSize.width) / 2
         static let minimumInterItem: CGFloat = 10
+        static let layoutInset: CGFloat = 24
     }    
     
     private let getAllStoresUseCase: GetAllStoresUseCase = GetAllStoresUseCase()
@@ -25,7 +26,7 @@ final class HomeViewController: UIViewController {
     private let mapView: NMFMapView = {
         let mapView = NMFMapView()
         mapView.zoomLevel = 15
-        mapView.positionMode = .compass
+        mapView.positionMode = .direction
         return mapView
     }()
     private lazy var addressButton: UIButton = {
@@ -53,6 +54,7 @@ final class HomeViewController: UIViewController {
                                    backgroundColor: UIColor.brandPink,
                                    radius: 15,
                                    top: 8, left: 16, bottom: 8, right: 16)
+        button.addTarget(self, action: #selector(researchStores), for: .touchUpInside)
         button.isHidden = true
         return button
     }()
@@ -68,6 +70,21 @@ final class HomeViewController: UIViewController {
                                    top: 8, left: 16, bottom: 8, right: 16)
         return button
     }()
+    
+    private lazy var currentLocationButton: UIButton = {
+             let button = UIButton()
+             let imageConfig = UIImage.SymbolConfiguration(pointSize: 20)
+             button.setImage(ImageLiterals.currentLocation, for: .normal)
+             button.imageView?.tintColor = .brandPink
+             button.setPreferredSymbolConfiguration(imageConfig, forImageIn: .normal)
+             button.layer.applyShadow(alpha: 0.15, x: 0, y: 1)
+             button.layer.borderColor = UIColor.customGray?.cgColor
+             button.layer.borderWidth = 1
+             button.layer.cornerRadius = 20
+             button.backgroundColor = .white
+             button.addTarget(self, action: #selector(moveCamera), for: .touchUpInside)
+             return button
+         }()
     
     private let storeCollectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
@@ -88,6 +105,7 @@ final class HomeViewController: UIViewController {
         configureAddsubview()
         configureConstraints()
         configureDelegate()
+        initMap()
         getStores()
     }
     
@@ -115,6 +133,24 @@ final class HomeViewController: UIViewController {
         }
     }
     
+    private func initMap() {
+            mapView.addCameraDelegate(delegate: self)
+        }
+
+    // MARK: - objc function
+        
+    @objc private func moveCamera() {
+        locationManager.settingLocationManager()
+        guard let currentLocation = locationManager.getCurrentLocation() else { return }
+        self.locateUserLocation(currentLocation)
+        //TODO: store research 함수 작성
+    }
+    
+    @objc private func researchStores() {
+        //TODO: store research 함수 내용 작성
+        researchButton.isHidden = true
+    }
+    
     // MARK: - configure
         
     private func configureDelegate() {
@@ -128,6 +164,7 @@ final class HomeViewController: UIViewController {
             addressButton,
             researchButton,
             turnToListButton,
+            currentLocationButton,
             storeCollectionView
         )
     }
@@ -139,7 +176,7 @@ final class HomeViewController: UIViewController {
         
         addressButton.snp.makeConstraints {
             $0.top.equalTo(view.safeAreaLayoutGuide).offset(8)
-            $0.left.right.equalToSuperview().inset(24)
+            $0.left.right.equalToSuperview().inset(Size.layoutInset)
             $0.height.equalTo(44)
         }
         
@@ -152,7 +189,7 @@ final class HomeViewController: UIViewController {
         storeCollectionView.snp.makeConstraints {
             $0.left.right.equalToSuperview()
             $0.height.equalTo(110)
-            $0.bottom.equalTo(view.safeAreaLayoutGuide).offset(-24)
+            $0.bottom.equalTo(view.safeAreaLayoutGuide).offset(-Size.layoutInset)
         }
         
         turnToListButton.snp.makeConstraints {
@@ -160,6 +197,12 @@ final class HomeViewController: UIViewController {
             $0.height.equalTo(30)
             $0.centerX.equalTo(researchButton)
         }
+        
+        currentLocationButton.snp.makeConstraints {
+                    $0.right.equalToSuperview().inset(Size.layoutInset)
+                    $0.bottom.equalTo(storeCollectionView.snp.top).offset(-36)
+                    $0.width.height.equalTo(40)
+                }
     }
 }
 // MARK: - UICollectionViewDataSource
@@ -213,3 +256,12 @@ extension HomeViewController: UIScrollViewDelegate {
         targetContentOffset.pointee = CGPoint(x: roundedIndex * pageWidthIncludingSpace - Size.contentInset, y: 0)
     }
 }
+
+extension HomeViewController: NMFMapViewCameraDelegate {
+     func mapView(_ mapView: NMFMapView, cameraWillChangeByReason reason: Int, animated: Bool) {
+         if reason == NMFMapChangedByGesture {
+             researchButton.isHidden = false
+             //TODO: callback mapView.cameraPosition 받아서 사용
+         }
+     }
+ }

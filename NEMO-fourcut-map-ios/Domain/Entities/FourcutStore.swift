@@ -43,6 +43,6 @@ struct Stores: Decodable {
 
 extension FourcutStore: CustomStringConvertible {
     var description: String {
-        return "가게이름: \(addressName) "
+        return "가게이름: \(placeName) "
     }
 }
