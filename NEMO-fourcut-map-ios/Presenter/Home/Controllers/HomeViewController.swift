@@ -21,7 +21,7 @@ final class HomeViewController: UIViewController {
     private let locationManager = LocationManager.shared
     private var storeList: [FourcutStore] = []
     private var currentPageIndex: CGFloat = 0
-    private var currentLocation: CLLocation?
+    private var searchingLocation: CLLocation?
     
     private let mapView: NMFMapView = {
         let mapView = NMFMapView()
@@ -106,7 +106,7 @@ final class HomeViewController: UIViewController {
         configureConstraints()
         configureDelegate()
         initMap()
-        getStores()
+        getStores(from: self.locationManager.getCurrentLocation())
     }
     
     // MARK: - closure & function
@@ -119,9 +119,8 @@ final class HomeViewController: UIViewController {
         self?.mapView.moveCamera(cameraUpdate)
     }
     
-    private func getStores() {
-        currentLocation = locationManager.getCurrentLocation()
-        guard let x = currentLocation?.coordinate.longitude, let y = currentLocation?.coordinate.latitude else { return }
+    private func getStores(from location: CLLocation?) {
+        guard let x = location?.coordinate.longitude, let y = location?.coordinate.latitude else { return }
         getAllStoresUseCase.getAllStores(longtitude: x, latitude:y) { [weak self] stores, error in
             guard let self = self else { return }
             guard error == nil else { return }
@@ -143,11 +142,12 @@ final class HomeViewController: UIViewController {
         locationManager.settingLocationManager()
         guard let currentLocation = locationManager.getCurrentLocation() else { return }
         self.locateUserLocation(currentLocation)
-        //TODO: store research 함수 작성
+        self.getStores(from: currentLocation)
+        researchButton.isHidden = true
     }
     
     @objc private func researchStores() {
-        //TODO: store research 함수 내용 작성
+        self.getStores(from: searchingLocation)
         researchButton.isHidden = true
     }
     
@@ -261,7 +261,8 @@ extension HomeViewController: NMFMapViewCameraDelegate {
      func mapView(_ mapView: NMFMapView, cameraWillChangeByReason reason: Int, animated: Bool) {
          if reason == NMFMapChangedByGesture {
              researchButton.isHidden = false
-             //TODO: callback mapView.cameraPosition 받아서 사용
+             //TODO: callback mapView.cameraPosition.target 받아서 사용
+             searchingLocation = CLLocation(latitude: mapView.cameraPosition.target.lat, longitude: mapView.cameraPosition.target.lng)
          }
      }
  }

@@ -40,9 +40,3 @@ struct Stores: Decodable {
         case all = "documents"
     }
 }
-
-extension FourcutStore: CustomStringConvertible {
-    var description: String {
-        return "가게이름: \(placeName) "
-    }
-}

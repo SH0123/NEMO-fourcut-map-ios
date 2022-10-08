@@ -17,6 +17,7 @@ final class StoreKakaoMapRepository: StoreRepository {
     private init() {}
     
     func getAllStores(longtitude x: Double, latitude y: Double, _ completionHandler: @escaping ([FourcutStore] , Error?) -> Void) {
+        clearStoreList()
         let fetchingGroup = DispatchGroup()
         for store in FourcutBrand.allCases {
             getEachStore(dispatchGroup: fetchingGroup,
@@ -31,12 +32,14 @@ final class StoreKakaoMapRepository: StoreRepository {
         }
     }
     
+    private func clearStoreList() { stores = [] }
+    
     private func getEachStore(dispatchGroup: DispatchGroup, store: FourcutBrand, longtitude x: String, latitude y: String) {
         dispatchGroup.enter()
         let headers: HTTPHeaders = [
             "Authorization": "KakaoAK 7c09c34ede09a5c5ea55da86506a63bb"
         ]
-        let radius = 10000
+        let radius = 1000
         let parameters: [String: Any] = [
                     "query": store.rawKoreanString,
                     "page": 1,
