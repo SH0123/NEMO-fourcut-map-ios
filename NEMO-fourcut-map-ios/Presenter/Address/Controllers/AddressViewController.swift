@@ -1,0 +1,156 @@
+//
+//  AddressViewController.swift
+//  NEMO-fourcut-map-ios
+//
+//  Created by sanghyo on 2022/10/09.
+//
+
+import Foundation
+import UIKit
+
+final class AddressViewController: UIViewController {
+    enum Size {
+        static let sidePadding: CGFloat = 24
+    }
+    
+    private let addressResults: [LocationInfo] = []
+    
+    private let headerView: UIView = {
+        let view = UIView()
+        view.backgroundColor = .background
+        return view
+    }()
+    
+    private let headerLabel: UILabel = {
+        let label = UILabel()
+        label.text = "장소 검색"
+        label.font = UIFont.contentsTitle
+        label.textColor = .customBlack
+        return label
+    }()
+    
+    private lazy var closeButton: UIButton = {
+        let button = UIButton()
+        button.setImage(ImageLiterals.xmark, for: .normal)
+        button.tintColor = .customBlack
+        button.addTarget(self, action: #selector(closeModal), for: .touchUpInside)
+        return button
+    }()
+    
+    private lazy var magnifyingButton: UIButton = {
+        let button = UIButton()
+        button.setImage(ImageLiterals.magnifyingGlass, for: .normal)
+        button.tintColor = .darkGray
+        return button
+    }()
+    
+    private let searchTextField: UITextField = {
+        let field = UITextField()
+        field.textColor = .darkGray
+        field.borderStyle = .roundedRect
+        field.backgroundColor = .customGray
+        field.placeholder = "구, 동, 역 등으로 검색"
+        field.font = UIFont.contentsDefault
+        return field
+    }()
+    
+    private let addressTableView: UITableView = {
+        let tableView = UITableView()
+        tableView.register(AddressTableViewCell.self, forCellReuseIdentifier: AddressTableViewCell.registerId)
+        tableView.register(EmptyTableViewCell.self, forCellReuseIdentifier: EmptyTableViewCell.registerId)
+        return tableView
+    }()
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        configureAddsubview()
+        configureConstraints()
+        configureDelegate()
+        view.backgroundColor = .background
+    }
+    
+    // MARK: - closure & function
+    
+    // MARK: - objc function
+    
+    @objc private func closeModal() {
+        self.dismiss(animated: true)
+    }
+    
+    // MARK: - configure
+    
+    private func configureDelegate() {
+        addressTableView.delegate = self
+        addressTableView.dataSource = self
+    }
+    
+    private func configureAddsubview() {
+        view.addSubviews(
+            headerView,
+            headerLabel,
+            closeButton,
+            magnifyingButton,
+            searchTextField,
+            addressTableView
+        )
+    }
+    
+    private func configureConstraints() {
+        headerView.snp.makeConstraints {
+            let safeAreaLayout = view.safeAreaLayoutGuide
+            
+            $0.leading.trailing.equalToSuperview()
+            $0.top.equalTo(safeAreaLayout)
+            $0.height.equalTo(60)
+        }
+        
+        headerLabel.snp.makeConstraints {
+            $0.center.equalTo(headerView)
+        }
+        
+        closeButton.snp.makeConstraints {
+            $0.size.equalTo(18)
+            $0.centerY.equalTo(headerView.snp.centerY)
+            $0.trailing.equalToSuperview().inset(Size.sidePadding)
+        }
+    }
+}
+
+// MARK: - table view Datasource & Delegate
+
+extension AddressViewController: UITableViewDelegate {
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        print("hello")
+    }
+    
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        switch addressResults.count {
+        case 0:
+            return tableView.frame.height
+        default:
+            return AddressTableViewCell.itemHeight
+        }
+    }
+}
+
+extension AddressViewController: UITableViewDataSource {
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        switch addressResults.count {
+        case 0:
+            guard let cell = tableView.dequeueReusableCell(withIdentifier: EmptyTableViewCell.registerId) as? EmptyTableViewCell else { return EmptyTableViewCell() }
+            return cell
+        default:
+            guard let cell = tableView.dequeueReusableCell(withIdentifier: AddressTableViewCell.registerId) as? AddressTableViewCell else { return AddressTableViewCell() }
+            return cell
+        }
+    }
+    
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        switch addressResults.count {
+        case 0:
+            return 1
+        default:
+            return addressResults.count
+        }
+    }
+}

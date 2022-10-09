@@ -54,7 +54,7 @@ final class HomeViewController: UIViewController {
         button.imageEdgeInsets = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 10)
         button.transform = CGAffineTransform(scaleX: -1.0, y: 1.0)
         button.titleLabel?.transform = CGAffineTransform(scaleX: -1.0, y: 1.0)
-  
+        button.addTarget(self, action: #selector(touchAddressButton), for: .touchUpInside)
         return button
     }()
     private lazy var researchButton: UIButton = {
@@ -210,6 +210,12 @@ final class HomeViewController: UIViewController {
     @objc private func researchStores() {
         self.getStores(from: searchingLocation)
         researchButton.isHidden = true
+    }
+    
+    @objc private func touchAddressButton() {
+        let addressViewController = AddressViewController()
+        addressViewController.modalPresentationStyle = .fullScreen
+        self.present(addressViewController, animated: true)
     }
     
     // MARK: - configure

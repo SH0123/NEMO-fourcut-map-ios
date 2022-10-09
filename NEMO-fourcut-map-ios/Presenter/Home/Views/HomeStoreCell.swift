@@ -8,7 +8,7 @@
 import UIKit
 import SnapKit
 
-class HomeStoreCell: UICollectionViewCell {
+final class HomeStoreCell: UICollectionViewCell {
     static let registerId = "HomeStoreCell"
     static let itemSize: CGSize = CGSize(width: 280, height: 120)
     
