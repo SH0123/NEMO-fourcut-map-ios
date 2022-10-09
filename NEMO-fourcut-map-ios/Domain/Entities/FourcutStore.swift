@@ -6,43 +6,36 @@
 //
 
 import Foundation
+import CoreLocation
 
-
-
-struct FourcutStore: Decodable {
+struct FourcutStore {
     let id: String
     let addressName: String
     let roadAddress: String
     let placeName: String
-    let x: String
-    let y: String
-    
-    enum CodingKeys: String, CodingKey {
-        case addressName = "address_name"
-        case roadAddress = "road_address_name"
-        case placeName = "place_name"
-        case id
-        case x
-        case y
+    let x: Double
+    let y: Double
+    let storeType: FourcutBrand?
+    var distance: Int = -1
+
+    init?(from locationInfo: LocationInfo, by currentLocation: CLLocation) {
+        guard let x = Double(locationInfo.x), let y = Double(locationInfo.y) else { return nil }
+        self.id = locationInfo.id
+        self.addressName = locationInfo.addressName
+        self.roadAddress = locationInfo.roadAddress
+        self.placeName = locationInfo.placeName
+        self.x = x
+        self.y = y
+        self.storeType = FourcutBrand(name: locationInfo.placeName)
+        self.distance = Int(currentLocation.distance(from: CLLocation(latitude: y, longitude: x)))
     }
 }
 
-extension FourcutStore {
-    var storeType: FourcutBrand? {
-        FourcutBrand(name: placeName)
-    }
-}
 
 struct Stores: Decodable {
-    let all: [FourcutStore]
+    let all: [LocationInfo]
     
     enum CodingKeys: String, CodingKey {
         case all = "documents"
-    }
-}
-
-extension FourcutStore: CustomStringConvertible {
-    var description: String {
-        return "가게이름: \(placeName) "
     }
 }

@@ -19,9 +19,20 @@ final class HomeViewController: UIViewController {
     
     private let getAllStoresUseCase: GetAllStoresUseCase = GetAllStoresUseCase()
     private let locationManager = LocationManager.shared
-    private var storeList: [FourcutStore] = []
-    private var currentPageIndex: CGFloat = 0
-    private var currentLocation: CLLocation?
+    private var markers: [NMFMarker] = []
+    private var storeList: [FourcutStore] = [] {
+        didSet {
+            DispatchQueue.main.async {
+                self.setMarkers(stores: self.storeList)
+            }
+        }
+    }
+    private var currentPageIndex: CGFloat = 0 {
+        didSet {
+            selectMarker(selectedIdx: Int(currentPageIndex))
+        }
+    }
+    private var searchingLocation: CLLocation?
     
     private let mapView: NMFMapView = {
         let mapView = NMFMapView()
@@ -82,7 +93,7 @@ final class HomeViewController: UIViewController {
              button.layer.borderWidth = 1
              button.layer.cornerRadius = 20
              button.backgroundColor = .white
-             button.addTarget(self, action: #selector(moveCamera), for: .touchUpInside)
+             button.addTarget(self, action: #selector(moveCameraToCurrentLocation), for: .touchUpInside)
              return button
          }()
     
@@ -106,27 +117,26 @@ final class HomeViewController: UIViewController {
         configureConstraints()
         configureDelegate()
         initMap()
-        getStores()
+        getStores(from: self.locationManager.getCurrentLocation())
     }
     
     // MARK: - closure & function
     
-    private lazy var locateUserLocation: (CLLocation) -> Void = { [weak self] location in
+    private func moveCamera(to location: CLLocation, while interval: TimeInterval){
         let camPosition = NMGLatLng(lat: location.coordinate.latitude, lng: location.coordinate.longitude)
         let cameraUpdate = NMFCameraUpdate(scrollTo: camPosition)
         cameraUpdate.animation = .easeIn
-        cameraUpdate.animationDuration = 0.5
-        self?.mapView.moveCamera(cameraUpdate)
+        cameraUpdate.animationDuration = interval
+        mapView.moveCamera(cameraUpdate)
     }
     
-    private func getStores() {
-        currentLocation = locationManager.getCurrentLocation()
-        guard let x = currentLocation?.coordinate.longitude, let y = currentLocation?.coordinate.latitude else { return }
+    private func getStores(from location: CLLocation?) {
+        guard let x = location?.coordinate.longitude, let y = location?.coordinate.latitude else { return }
         getAllStoresUseCase.getAllStores(longtitude: x, latitude:y) { [weak self] stores, error in
             guard let self = self else { return }
             guard error == nil else { return }
-            self.storeList = stores
-            print(self.storeList)
+            self.storeList = stores.sorted(by: {$0.distance < $1.distance})
+//            print(self.storeList)
             DispatchQueue.main.async {
                 self.storeCollectionView.reloadData()
             }
@@ -136,18 +146,68 @@ final class HomeViewController: UIViewController {
     private func initMap() {
             mapView.addCameraDelegate(delegate: self)
         }
+    
+    private func setMarkers(stores: [FourcutStore]) {
+        clearMarkers()
+        
+        for idx in 0 ..< stores.count {
+            let store = stores[idx]
+            let marker = NMFMarker()
+            marker.position = NMGLatLng(lat: store.y, lng: store.x)
+            marker.iconImage = NMFOverlayImage(name: ImageLiterals.nonSelectedMarker)
+            marker.width = 30
+            marker.height = 40
+            marker.mapView = self.mapView
+            marker.touchHandler = { [weak self] _ in
+                guard let self = self else { return false }
+                let pageWidthIncludingSpace = HomeStoreCell.itemSize.width + Size.minimumInterItem
+                self.currentPageIndex = CGFloat(idx)
+                self.storeCollectionView.contentOffset.x = self.currentPageIndex * pageWidthIncludingSpace - Size.contentInset
+                return true
+            }
+            markers.append(marker)
+        }
+    }
+    
+    private func clearMarkers() {
+        for marker in markers {
+            marker.mapView = nil
+        }
+        markers = []
+    }
+    
+    private func selectMarker(selectedIdx: Int) {
+        for index in 0 ..< markers.count {
+            if index == selectedIdx {
+                let marker = markers[index]
+                let storeLocation = CLLocation(latitude: marker.position.lat, longitude: marker.position.lng)
+                markers[index].iconImage = NMFOverlayImage(name: ImageLiterals.selectedMarker)
+                setMarkerSize(marker: markers[index], width: 39, height: 52)
+                moveCamera(to: storeLocation, while: 0.2)
+            } else {
+                markers[index].iconImage = NMFOverlayImage(name: ImageLiterals.nonSelectedMarker)
+                setMarkerSize(marker: markers[index], width: 30, height: 40)
+            }
+        }
+    }
+    
+    private func setMarkerSize(marker: NMFMarker, width: CGFloat, height: CGFloat) {
+        marker.width = width
+        marker.height = height
+    }
 
     // MARK: - objc function
         
-    @objc private func moveCamera() {
+    @objc private func moveCameraToCurrentLocation() {
         locationManager.settingLocationManager()
         guard let currentLocation = locationManager.getCurrentLocation() else { return }
-        self.locateUserLocation(currentLocation)
-        //TODO: store research 함수 작성
+        self.moveCamera(to: currentLocation, while: 0.5)
+        self.getStores(from: currentLocation)
+        researchButton.isHidden = true
     }
     
     @objc private func researchStores() {
-        //TODO: store research 함수 내용 작성
+        self.getStores(from: searchingLocation)
         researchButton.isHidden = true
     }
     
@@ -261,7 +321,8 @@ extension HomeViewController: NMFMapViewCameraDelegate {
      func mapView(_ mapView: NMFMapView, cameraWillChangeByReason reason: Int, animated: Bool) {
          if reason == NMFMapChangedByGesture {
              researchButton.isHidden = false
-             //TODO: callback mapView.cameraPosition 받아서 사용
+             //TODO: callback mapView.cameraPosition.target 받아서 사용
+             searchingLocation = CLLocation(latitude: mapView.cameraPosition.target.lat, longitude: mapView.cameraPosition.target.lng)
          }
      }
  }
