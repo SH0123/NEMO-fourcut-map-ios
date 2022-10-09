@@ -10,7 +10,13 @@ import SnapKit
 
 class HomeStoreCell: UICollectionViewCell {
     static let registerId = "HomeStoreCell"
-    static let itemSize: CGSize = CGSize(width: 260, height: 100)
+    static let itemSize: CGSize = CGSize(width: 280, height: 120)
+    
+    var storeInfo: FourcutStore? {
+        didSet {
+            setCellContents(with: storeInfo)
+        }
+    }
     
     private let container: UIView = {
         let container = UIView()
@@ -83,6 +89,19 @@ class HomeStoreCell: UICollectionViewCell {
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+    
+    // MARK: - function
+    
+    private func setCellContents(with store: FourcutStore?) {
+        guard let store  = store else { return }
+        storeNameLabel.text = store.placeName
+        brandCharacterView.image = store.storeType?.brandImage
+        distanceLabel.text = over1km(distance: store.distance)
+    }
+    
+    private func over1km(distance: Int) -> String {
+        return distance >= 1000 ? "1km+" : "\(distance)m"
     }
     
     // MARK: - configure

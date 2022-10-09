@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import UIKit
 
 enum FourcutBrand: Int, CaseIterable {
     case lifeFourcut
@@ -30,11 +31,7 @@ enum FourcutBrand: Int, CaseIterable {
             return nil
         }
     }
-    
-    var rawInt: Int {
-        return self.rawValue
-    }
-    
+
     var rawKoreanString: String {
         switch self {
         case .lifeFourcut:
@@ -47,6 +44,21 @@ enum FourcutBrand: Int, CaseIterable {
             return "포토시그니처"
         case .photoism:
             return "포토이즘"
+        }
+    }
+    
+    var brandImage: UIImage? {
+        switch self {
+        case .lifeFourcut:
+            return ImageLiterals.lifeNemo
+        case .haruFilm:
+            return ImageLiterals.haruSkyNemo
+        case .selpix:
+            return ImageLiterals.selpixNemo
+        case .photoSignature:
+            return ImageLiterals.signatureNemo
+        case .photoism:
+            return ImageLiterals.photoismNemo
         }
     }
 }

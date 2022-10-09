@@ -17,6 +17,7 @@ enum ImageLiterals {
     static let haruBlueNemo = UIImage(named: "haruBlueNemo")
     static let selpixNemo = UIImage(named: "selpixNemo")
     static let signatureNemo = UIImage(named: "signatureNemo")
+    static let photoismNemo = UIImage(named: "photoismNemo")
     
     // MARK: - SF Symbol
     static let downArrow = UIImage(systemName: "chevron.down")
