@@ -20,10 +20,11 @@ final class HomeViewController: UIViewController {
     private let getAllStoresUseCase: GetAllStoresUseCase = GetAllStoresUseCase()
     private let locationManager = LocationManager.shared
     private var markers: [NMFMarker] = []
-    private var storeList: [FourcutStore] = [] {
+    private lazy var storeList: [FourcutStore] = [] {
         didSet {
             DispatchQueue.main.async {
                 self.setMarkers(stores: self.storeList)
+                self.currentPageIndex = Int(self.currentPageIndex) >= self.storeList.count ? CGFloat(self.storeList.count - 1) : self.currentPageIndex
             }
         }
     }
@@ -136,7 +137,7 @@ final class HomeViewController: UIViewController {
             guard let self = self else { return }
             guard error == nil else { return }
             self.storeList = stores.sorted(by: {$0.distance < $1.distance})
-//            print(self.storeList)
+            print(self.storeList)
             DispatchQueue.main.async {
                 self.storeCollectionView.reloadData()
             }
@@ -235,20 +236,20 @@ final class HomeViewController: UIViewController {
         }
         
         addressButton.snp.makeConstraints {
-            $0.top.equalTo(view.safeAreaLayoutGuide).offset(8)
+            $0.top.equalTo(view.safeAreaLayoutGuide).offset(16)
             $0.left.right.equalToSuperview().inset(Size.layoutInset)
             $0.height.equalTo(44)
         }
         
         researchButton.snp.makeConstraints {
-            $0.top.equalTo(addressButton.snp.bottom).offset(8)
+            $0.top.equalTo(addressButton.snp.bottom).offset(16)
             $0.centerX.equalTo(addressButton.snp.centerX)
             $0.height.equalTo(40)
         }
         
         storeCollectionView.snp.makeConstraints {
             $0.left.right.equalToSuperview()
-            $0.height.equalTo(110)
+            $0.height.equalTo(130)
             $0.bottom.equalTo(view.safeAreaLayoutGuide).offset(-Size.layoutInset)
         }
         
@@ -279,6 +280,7 @@ extension HomeViewController: UICollectionViewDataSource {
             return cell
         } else {
             guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: HomeStoreCell.registerId, for: indexPath) as? HomeStoreCell else { return HomeStoreCell() }
+            cell.storeInfo = storeList[indexPath.row]
             return cell
         }
     }
@@ -321,7 +323,6 @@ extension HomeViewController: NMFMapViewCameraDelegate {
      func mapView(_ mapView: NMFMapView, cameraWillChangeByReason reason: Int, animated: Bool) {
          if reason == NMFMapChangedByGesture {
              researchButton.isHidden = false
-             //TODO: callback mapView.cameraPosition.target 받아서 사용
              searchingLocation = CLLocation(latitude: mapView.cameraPosition.target.lat, longitude: mapView.cameraPosition.target.lng)
          }
      }

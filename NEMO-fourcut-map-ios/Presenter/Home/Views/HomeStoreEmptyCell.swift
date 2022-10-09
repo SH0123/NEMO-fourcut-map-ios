@@ -9,7 +9,7 @@ import UIKit
 
 class HomeStoreEmptyCell: UICollectionViewCell {
     static let registerId = "HomeStoreEmptyCell"
-    static let itemSize: CGSize = CGSize(width: 260, height: 100)
+    static let itemSize: CGSize = CGSize(width: 280, height: 120)
     
     private let container: UIView = {
         let container = UIView()
