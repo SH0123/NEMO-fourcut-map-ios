@@ -7,6 +7,7 @@
 
 import Foundation
 import Alamofire
+import CoreLocation
 
 final class StoreKakaoMapRepository: StoreRepository {
     
@@ -22,8 +23,8 @@ final class StoreKakaoMapRepository: StoreRepository {
         for store in FourcutBrand.allCases {
             getEachStore(dispatchGroup: fetchingGroup,
                          store: store,
-                         longtitude: String(x),
-                         latitude: String(y))
+                         longtitude: x,
+                         latitude: y)
         }
         
         fetchingGroup.notify(queue: .global()) { [weak self] in
@@ -34,18 +35,20 @@ final class StoreKakaoMapRepository: StoreRepository {
     
     private func clearStoreList() { stores = [] }
     
-    private func getEachStore(dispatchGroup: DispatchGroup, store: FourcutBrand, longtitude x: String, latitude y: String) {
+    private func getEachStore(dispatchGroup: DispatchGroup, store: FourcutBrand, longtitude x: Double, latitude y: Double) {
         dispatchGroup.enter()
+        
+        let currentLocation = CLLocation(latitude: y, longitude: x)
         let headers: HTTPHeaders = [
             "Authorization": "KakaoAK 7c09c34ede09a5c5ea55da86506a63bb"
         ]
-        let radius = 10000
+        let radius = 1000
         let parameters: [String: Any] = [
                     "query": store.rawKoreanString,
                     "page": 1,
                     "size": 15,
-                    "x": x,
-                    "y": y,
+                    "x": String(x),
+                    "y": String(y),
                     "radius": radius
                 ]
         AF.request("https://dapi.kakao.com/v2/local/search/keyword.json", method: .get,
@@ -54,7 +57,7 @@ final class StoreKakaoMapRepository: StoreRepository {
         .responseDecodable(of: Stores.self) { response in
             guard let locationInfoes = response.value?.all else { return }
             let stores = locationInfoes.compactMap {
-                return FourcutStore(from: $0)
+                return FourcutStore(from: $0, by: currentLocation)
             }
             self.stores += stores
             self.error = response.error

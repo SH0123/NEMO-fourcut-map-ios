@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import CoreLocation
 
 struct FourcutStore {
     let id: String
@@ -15,9 +16,9 @@ struct FourcutStore {
     let x: Double
     let y: Double
     let storeType: FourcutBrand?
-    let distance: Int = -1
+    var distance: Int = -1
 
-    init?(from locationInfo: LocationInfo) {
+    init?(from locationInfo: LocationInfo, by currentLocation: CLLocation) {
         guard let x = Double(locationInfo.x), let y = Double(locationInfo.y) else { return nil }
         self.id = locationInfo.id
         self.addressName = locationInfo.addressName
@@ -26,6 +27,7 @@ struct FourcutStore {
         self.x = x
         self.y = y
         self.storeType = FourcutBrand(name: locationInfo.placeName)
+        self.distance = Int(currentLocation.distance(from: CLLocation(latitude: y, longitude: x)))
     }
 }
 

@@ -29,7 +29,7 @@ final class HomeViewController: UIViewController {
     }
     private var currentPageIndex: CGFloat = 0 {
         didSet {
-            print(currentPageIndex)
+            selectMarker(selectedIdx: Int(currentPageIndex))
         }
     }
     private var searchingLocation: CLLocation?
@@ -93,7 +93,7 @@ final class HomeViewController: UIViewController {
              button.layer.borderWidth = 1
              button.layer.cornerRadius = 20
              button.backgroundColor = .white
-             button.addTarget(self, action: #selector(moveCamera), for: .touchUpInside)
+             button.addTarget(self, action: #selector(moveCameraToCurrentLocation), for: .touchUpInside)
              return button
          }()
     
@@ -122,12 +122,12 @@ final class HomeViewController: UIViewController {
     
     // MARK: - closure & function
     
-    private lazy var locateUserLocation: (CLLocation) -> Void = { [weak self] location in
+    private func moveCamera(to location: CLLocation, while interval: TimeInterval){
         let camPosition = NMGLatLng(lat: location.coordinate.latitude, lng: location.coordinate.longitude)
         let cameraUpdate = NMFCameraUpdate(scrollTo: camPosition)
         cameraUpdate.animation = .easeIn
-        cameraUpdate.animationDuration = 0.5
-        self?.mapView.moveCamera(cameraUpdate)
+        cameraUpdate.animationDuration = interval
+        mapView.moveCamera(cameraUpdate)
     }
     
     private func getStores(from location: CLLocation?) {
@@ -135,8 +135,8 @@ final class HomeViewController: UIViewController {
         getAllStoresUseCase.getAllStores(longtitude: x, latitude:y) { [weak self] stores, error in
             guard let self = self else { return }
             guard error == nil else { return }
-            self.storeList = stores
-            //print(self.storeList)
+            self.storeList = stores.sorted(by: {$0.distance < $1.distance})
+//            print(self.storeList)
             DispatchQueue.main.async {
                 self.storeCollectionView.reloadData()
             }
@@ -150,13 +150,21 @@ final class HomeViewController: UIViewController {
     private func setMarkers(stores: [FourcutStore]) {
         clearMarkers()
         
-        for store in stores {
+        for idx in 0 ..< stores.count {
+            let store = stores[idx]
             let marker = NMFMarker()
             marker.position = NMGLatLng(lat: store.y, lng: store.x)
             marker.iconImage = NMFOverlayImage(name: ImageLiterals.nonSelectedMarker)
             marker.width = 30
             marker.height = 40
             marker.mapView = self.mapView
+            marker.touchHandler = { [weak self] _ in
+                guard let self = self else { return false }
+                let pageWidthIncludingSpace = HomeStoreCell.itemSize.width + Size.minimumInterItem
+                self.currentPageIndex = CGFloat(idx)
+                self.storeCollectionView.contentOffset.x = self.currentPageIndex * pageWidthIncludingSpace - Size.contentInset
+                return true
+            }
             markers.append(marker)
         }
     }
@@ -167,13 +175,33 @@ final class HomeViewController: UIViewController {
         }
         markers = []
     }
+    
+    private func selectMarker(selectedIdx: Int) {
+        for index in 0 ..< markers.count {
+            if index == selectedIdx {
+                let marker = markers[index]
+                let storeLocation = CLLocation(latitude: marker.position.lat, longitude: marker.position.lng)
+                markers[index].iconImage = NMFOverlayImage(name: ImageLiterals.selectedMarker)
+                setMarkerSize(marker: markers[index], width: 39, height: 52)
+                moveCamera(to: storeLocation, while: 0.2)
+            } else {
+                markers[index].iconImage = NMFOverlayImage(name: ImageLiterals.nonSelectedMarker)
+                setMarkerSize(marker: markers[index], width: 30, height: 40)
+            }
+        }
+    }
+    
+    private func setMarkerSize(marker: NMFMarker, width: CGFloat, height: CGFloat) {
+        marker.width = width
+        marker.height = height
+    }
 
     // MARK: - objc function
         
-    @objc private func moveCamera() {
+    @objc private func moveCameraToCurrentLocation() {
         locationManager.settingLocationManager()
         guard let currentLocation = locationManager.getCurrentLocation() else { return }
-        self.locateUserLocation(currentLocation)
+        self.moveCamera(to: currentLocation, while: 0.5)
         self.getStores(from: currentLocation)
         researchButton.isHidden = true
     }
