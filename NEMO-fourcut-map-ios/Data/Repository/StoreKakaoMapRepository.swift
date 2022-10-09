@@ -39,7 +39,7 @@ final class StoreKakaoMapRepository: StoreRepository {
         let headers: HTTPHeaders = [
             "Authorization": "KakaoAK 7c09c34ede09a5c5ea55da86506a63bb"
         ]
-        let radius = 1000
+        let radius = 10000
         let parameters: [String: Any] = [
                     "query": store.rawKoreanString,
                     "page": 1,
@@ -53,7 +53,7 @@ final class StoreKakaoMapRepository: StoreRepository {
         .validate(statusCode: 200..<300)
         .responseDecodable(of: Stores.self) { response in
             guard let locationInfoes = response.value?.all else { return }
-            let stores = locationInfoes.map {
+            let stores = locationInfoes.compactMap {
                 return FourcutStore(from: $0)
             }
             self.stores += stores

@@ -32,4 +32,8 @@ enum ImageLiterals {
     static let emptySelectRound = UIImage(systemName: "circle")
     static let filledSelectRound = UIImage(systemName: "record.circle")
     static let currentLocation = UIImage(systemName: "location.fill")
+    
+    // MARK: - Icon
+    static let selectedMarker = "blackMarker"
+    static let nonSelectedMarker = "pinkMarker"
 }

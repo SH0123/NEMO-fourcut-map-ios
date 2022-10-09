@@ -19,8 +19,19 @@ final class HomeViewController: UIViewController {
     
     private let getAllStoresUseCase: GetAllStoresUseCase = GetAllStoresUseCase()
     private let locationManager = LocationManager.shared
-    private var storeList: [FourcutStore] = []
-    private var currentPageIndex: CGFloat = 0
+    private var markers: [NMFMarker] = []
+    private var storeList: [FourcutStore] = [] {
+        didSet {
+            DispatchQueue.main.async {
+                self.setMarkers(stores: self.storeList)
+            }
+        }
+    }
+    private var currentPageIndex: CGFloat = 0 {
+        didSet {
+            print(currentPageIndex)
+        }
+    }
     private var searchingLocation: CLLocation?
     
     private let mapView: NMFMapView = {
@@ -125,7 +136,7 @@ final class HomeViewController: UIViewController {
             guard let self = self else { return }
             guard error == nil else { return }
             self.storeList = stores
-            print(self.storeList)
+            //print(self.storeList)
             DispatchQueue.main.async {
                 self.storeCollectionView.reloadData()
             }
@@ -135,6 +146,27 @@ final class HomeViewController: UIViewController {
     private func initMap() {
             mapView.addCameraDelegate(delegate: self)
         }
+    
+    private func setMarkers(stores: [FourcutStore]) {
+        clearMarkers()
+        
+        for store in stores {
+            let marker = NMFMarker()
+            marker.position = NMGLatLng(lat: store.y, lng: store.x)
+            marker.iconImage = NMFOverlayImage(name: ImageLiterals.nonSelectedMarker)
+            marker.width = 30
+            marker.height = 40
+            marker.mapView = self.mapView
+            markers.append(marker)
+        }
+    }
+    
+    private func clearMarkers() {
+        for marker in markers {
+            marker.mapView = nil
+        }
+        markers = []
+    }
 
     // MARK: - objc function
         

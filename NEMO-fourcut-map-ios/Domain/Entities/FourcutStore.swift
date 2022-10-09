@@ -7,25 +7,25 @@
 
 import Foundation
 
-
-
 struct FourcutStore {
     let id: String
     let addressName: String
     let roadAddress: String
     let placeName: String
-    let x: String
-    let y: String
+    let x: Double
+    let y: Double
     let storeType: FourcutBrand?
-    
-    init(from locationInfo: LocationInfo) {
-        id = locationInfo.id
-        addressName = locationInfo.addressName
-        roadAddress = locationInfo.roadAddress
-        placeName = locationInfo.placeName
-        x = locationInfo.x
-        y = locationInfo.y
-        storeType = FourcutBrand(name: locationInfo.placeName)
+    let distance: Int = -1
+
+    init?(from locationInfo: LocationInfo) {
+        guard let x = Double(locationInfo.x), let y = Double(locationInfo.y) else { return nil }
+        self.id = locationInfo.id
+        self.addressName = locationInfo.addressName
+        self.roadAddress = locationInfo.roadAddress
+        self.placeName = locationInfo.placeName
+        self.x = x
+        self.y = y
+        self.storeType = FourcutBrand(name: locationInfo.placeName)
     }
 }
 
