@@ -52,8 +52,11 @@ final class StoreKakaoMapRepository: StoreRepository {
                    parameters: parameters, headers: headers)
         .validate(statusCode: 200..<300)
         .responseDecodable(of: Stores.self) { response in
-            guard var fourcutStores = response.value?.all else { return }
-            self.stores += fourcutStores
+            guard let locationInfoes = response.value?.all else { return }
+            let stores = locationInfoes.map {
+                return FourcutStore(from: $0)
+            }
+            self.stores += stores
             self.error = response.error
             dispatchGroup.leave()
         }

@@ -9,32 +9,29 @@ import Foundation
 
 
 
-struct FourcutStore: Decodable {
+struct FourcutStore {
     let id: String
     let addressName: String
     let roadAddress: String
     let placeName: String
     let x: String
     let y: String
+    let storeType: FourcutBrand?
     
-    enum CodingKeys: String, CodingKey {
-        case addressName = "address_name"
-        case roadAddress = "road_address_name"
-        case placeName = "place_name"
-        case id
-        case x
-        case y
+    init(from locationInfo: LocationInfo) {
+        id = locationInfo.id
+        addressName = locationInfo.addressName
+        roadAddress = locationInfo.roadAddress
+        placeName = locationInfo.placeName
+        x = locationInfo.x
+        y = locationInfo.y
+        storeType = FourcutBrand(name: locationInfo.placeName)
     }
 }
 
-extension FourcutStore {
-    var storeType: FourcutBrand? {
-        FourcutBrand(name: placeName)
-    }
-}
 
 struct Stores: Decodable {
-    let all: [FourcutStore]
+    let all: [LocationInfo]
     
     enum CodingKeys: String, CodingKey {
         case all = "documents"
