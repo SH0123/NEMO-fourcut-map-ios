@@ -13,7 +13,7 @@ final class AddressViewController: UIViewController {
         static let sidePadding: CGFloat = 24
     }
     
-    private let addressResults: [LocationInfo]? = [LocationInfo(id: "12", addressName: "12", roadAddress: "12", placeName: "12", x: "12", y: "12"), LocationInfo(id: "12", addressName: "12", roadAddress: "12", placeName: "12", x: "12", y: "12")]
+    private let addressResults: [LocationInfo]? = LocationInfoMockData.mockData
     private var addressResultsStatus: AddressResultsStatus {
         get {
             return AddressResultsStatus(results: addressResults)
@@ -66,6 +66,7 @@ final class AddressViewController: UIViewController {
         tableView.backgroundColor = .customGray
         tableView.showsVerticalScrollIndicator = false
         tableView.alwaysBounceVertical = false
+        tableView.separatorInset = UIEdgeInsets(top: 0, left: 24, bottom: 0, right: 24)
         return tableView
     }()
     
