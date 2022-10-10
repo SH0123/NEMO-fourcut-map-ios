@@ -13,7 +13,12 @@ final class AddressViewController: UIViewController {
         static let sidePadding: CGFloat = 24
     }
     
-    private let addressResults: [LocationInfo] = []
+    private let addressResults: [LocationInfo]? = nil
+    private var addressResultsStatus: AddressResultsStatus {
+        get {
+            return AddressResultsStatus(results: addressResults)
+        }
+    }
     
     private let headerView: UIView = {
         let view = UIView()
@@ -34,19 +39,13 @@ final class AddressViewController: UIViewController {
         button.setImage(ImageLiterals.xmark, for: .normal)
         button.tintColor = .customBlack
         button.addTarget(self, action: #selector(closeModal), for: .touchUpInside)
-        return button
-    }()
-    
-    private lazy var magnifyingButton: UIButton = {
-        let button = UIButton()
-        button.setImage(ImageLiterals.magnifyingGlass, for: .normal)
-        button.tintColor = .darkGray
+        button.contentHorizontalAlignment = .trailing
         return button
     }()
     
     private let searchTextField: UITextField = {
         let field = UITextField()
-        field.textColor = .darkGray
+        field.textColor = .customBlack
         field.borderStyle = .roundedRect
         field.backgroundColor = .customGray
         field.placeholder = "구, 동, 역 등으로 검색"
@@ -58,15 +57,18 @@ final class AddressViewController: UIViewController {
         let tableView = UITableView()
         tableView.register(AddressTableViewCell.self, forCellReuseIdentifier: AddressTableViewCell.registerId)
         tableView.register(EmptyTableViewCell.self, forCellReuseIdentifier: EmptyTableViewCell.registerId)
+        tableView.backgroundColor = .customGray
+        tableView.showsVerticalScrollIndicator = false
+        tableView.alwaysBounceVertical = false
         return tableView
     }()
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        configureUI()
         configureAddsubview()
         configureConstraints()
         configureDelegate()
-        view.backgroundColor = .background
     }
     
     // MARK: - closure & function
@@ -79,9 +81,14 @@ final class AddressViewController: UIViewController {
     
     // MARK: - configure
     
+    private func configureUI() {
+        view.backgroundColor = .background
+    }
+    
     private func configureDelegate() {
         addressTableView.delegate = self
         addressTableView.dataSource = self
+        searchTextField.delegate = self
     }
     
     private func configureAddsubview() {
@@ -89,7 +96,6 @@ final class AddressViewController: UIViewController {
             headerView,
             headerLabel,
             closeButton,
-            magnifyingButton,
             searchTextField,
             addressTableView
         )
@@ -109,9 +115,22 @@ final class AddressViewController: UIViewController {
         }
         
         closeButton.snp.makeConstraints {
-            $0.size.equalTo(18)
+            $0.size.equalTo(44)
             $0.centerY.equalTo(headerView.snp.centerY)
             $0.trailing.equalToSuperview().inset(Size.sidePadding)
+        }
+        
+        searchTextField.snp.makeConstraints {
+            $0.centerX.equalToSuperview()
+            $0.leading.trailing.equalToSuperview().inset(Size.sidePadding)
+            $0.top.equalTo(headerView.snp.bottom).offset(16)
+            $0.height.equalTo(44)
+        }
+        
+        addressTableView.snp.makeConstraints {
+            $0.leading.trailing.equalToSuperview()
+            $0.top.equalTo(searchTextField.snp.bottom).offset(16)
+            $0.bottom.equalToSuperview()
         }
     }
 }
@@ -124,10 +143,10 @@ extension AddressViewController: UITableViewDelegate {
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        switch addressResults.count {
-        case 0:
+        switch addressResultsStatus {
+        case .empty, .notDetermined:
             return tableView.frame.height
-        default:
+        case .notEmpty:
             return AddressTableViewCell.itemHeight
         }
     }
@@ -135,8 +154,8 @@ extension AddressViewController: UITableViewDelegate {
 
 extension AddressViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        switch addressResults.count {
-        case 0:
+        switch addressResultsStatus {
+        case .empty:
             guard let cell = tableView.dequeueReusableCell(withIdentifier: EmptyTableViewCell.registerId) as? EmptyTableViewCell else { return EmptyTableViewCell() }
             return cell
         default:
@@ -146,11 +165,24 @@ extension AddressViewController: UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        switch addressResults.count {
-        case 0:
+        switch addressResultsStatus {
+        case .empty:
+            tableView.separatorStyle = .none
             return 1
-        default:
+        case .notEmpty:
+            tableView.separatorStyle = .singleLine
+            guard let addressResults = addressResults else { return 0 }
             return addressResults.count
+        default:
+            return 0
         }
+    }
+}
+
+extension AddressViewController: UITextFieldDelegate {
+    
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        //TODO: 엔터 버튼에 따른 검색 처리 action
+        return true
     }
 }
