@@ -13,7 +13,7 @@ final class AddressViewController: UIViewController {
         static let sidePadding: CGFloat = 24
     }
     
-    private let addressResults: [LocationInfo]? = nil
+    private let addressResults: [LocationInfo]? = [LocationInfo(id: "12", addressName: "12", roadAddress: "12", placeName: "12", x: "12", y: "12"), LocationInfo(id: "12", addressName: "12", roadAddress: "12", placeName: "12", x: "12", y: "12")]
     private var addressResultsStatus: AddressResultsStatus {
         get {
             return AddressResultsStatus(results: addressResults)
@@ -51,6 +51,12 @@ final class AddressViewController: UIViewController {
         field.placeholder = "구, 동, 역 등으로 검색"
         field.font = UIFont.contentsDefault
         return field
+    }()
+    
+    private let divideLine: UIView = {
+        let view = UIView()
+        view.backgroundColor = .customGray
+        return view
     }()
     
     private let addressTableView: UITableView = {
@@ -97,6 +103,7 @@ final class AddressViewController: UIViewController {
             headerLabel,
             closeButton,
             searchTextField,
+            divideLine,
             addressTableView
         )
     }
@@ -127,9 +134,15 @@ final class AddressViewController: UIViewController {
             $0.height.equalTo(44)
         }
         
-        addressTableView.snp.makeConstraints {
+        divideLine.snp.makeConstraints {
             $0.leading.trailing.equalToSuperview()
             $0.top.equalTo(searchTextField.snp.bottom).offset(16)
+            $0.height.equalTo(5)
+        }
+        
+        addressTableView.snp.makeConstraints {
+            $0.leading.trailing.equalToSuperview()
+            $0.top.equalTo(divideLine.snp.bottom)
             $0.bottom.equalToSuperview()
         }
     }
@@ -160,6 +173,8 @@ extension AddressViewController: UITableViewDataSource {
             return cell
         default:
             guard let cell = tableView.dequeueReusableCell(withIdentifier: AddressTableViewCell.registerId) as? AddressTableViewCell else { return AddressTableViewCell() }
+            guard let addressResults = addressResults else { return cell }
+            cell.locationInfo = addressResults[indexPath.row]
             return cell
         }
     }

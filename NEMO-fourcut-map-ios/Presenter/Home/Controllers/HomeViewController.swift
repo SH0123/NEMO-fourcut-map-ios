@@ -28,11 +28,7 @@ final class HomeViewController: UIViewController {
             }
         }
     }
-    private var currentPageIndex: CGFloat = 0 {
-        didSet {
-            selectMarker(selectedIdx: Int(currentPageIndex))
-        }
-    }
+    private var currentPageIndex: CGFloat = 0
     private var searchingLocation: CLLocation?
     
     private let mapView: NMFMapView = {
@@ -322,6 +318,8 @@ extension HomeViewController: UIScrollViewDelegate {
         }
         
         targetContentOffset.pointee = CGPoint(x: roundedIndex * pageWidthIncludingSpace - Size.contentInset, y: 0)
+        
+        selectMarker(selectedIdx: Int(currentPageIndex))
     }
 }
 
