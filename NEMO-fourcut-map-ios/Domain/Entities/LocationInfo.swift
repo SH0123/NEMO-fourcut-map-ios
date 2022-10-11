@@ -24,3 +24,11 @@ struct LocationInfo: Decodable {
         case y
     }
 }
+
+struct Locations: Decodable {
+    let all: [LocationInfo]
+    
+    enum CodingKeys: String, CodingKey {
+        case all = "documents"
+    }
+}

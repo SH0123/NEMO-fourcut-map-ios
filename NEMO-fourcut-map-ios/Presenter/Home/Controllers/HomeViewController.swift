@@ -17,6 +17,7 @@ final class HomeViewController: UIViewController {
         static let layoutInset: CGFloat = 24
     }    
     
+    private let addressViewController = AddressViewController()
     private let getAllStoresUseCase: GetAllStoresUseCase = GetAllStoresUseCase()
     private let locationManager = LocationManager.shared
     private var markers: [NMFMarker] = []
@@ -28,11 +29,7 @@ final class HomeViewController: UIViewController {
             }
         }
     }
-    private var currentPageIndex: CGFloat = 0 {
-        didSet {
-            selectMarker(selectedIdx: Int(currentPageIndex))
-        }
-    }
+    private var currentPageIndex: CGFloat = 0
     private var searchingLocation: CLLocation?
     
     private let mapView: NMFMapView = {
@@ -54,7 +51,7 @@ final class HomeViewController: UIViewController {
         button.imageEdgeInsets = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 10)
         button.transform = CGAffineTransform(scaleX: -1.0, y: 1.0)
         button.titleLabel?.transform = CGAffineTransform(scaleX: -1.0, y: 1.0)
-  
+        button.addTarget(self, action: #selector(touchAddressButton), for: .touchUpInside)
         return button
     }()
     private lazy var researchButton: UIButton = {
@@ -212,11 +209,17 @@ final class HomeViewController: UIViewController {
         researchButton.isHidden = true
     }
     
+    @objc private func touchAddressButton() {
+        addressViewController.modalPresentationStyle = .fullScreen
+        self.present(addressViewController, animated: true)
+    }
+    
     // MARK: - configure
         
     private func configureDelegate() {
         storeCollectionView.dataSource = self
         storeCollectionView.delegate = self
+        addressViewController.delegate = self
     }
     
     private func configureAddsubview() {
@@ -238,7 +241,7 @@ final class HomeViewController: UIViewController {
         addressButton.snp.makeConstraints {
             $0.top.equalTo(view.safeAreaLayoutGuide).offset(16)
             $0.left.right.equalToSuperview().inset(Size.layoutInset)
-            $0.height.equalTo(44)
+            $0.height.equalTo(50)
         }
         
         researchButton.snp.makeConstraints {
@@ -316,6 +319,8 @@ extension HomeViewController: UIScrollViewDelegate {
         }
         
         targetContentOffset.pointee = CGPoint(x: roundedIndex * pageWidthIncludingSpace - Size.contentInset, y: 0)
+        
+        selectMarker(selectedIdx: Int(currentPageIndex))
     }
 }
 
@@ -327,3 +332,14 @@ extension HomeViewController: NMFMapViewCameraDelegate {
          }
      }
  }
+
+extension HomeViewController: AddressViewControllerDelegate {
+    func setSearchAddress(locationInfo: LocationInfo) {
+        addressButton.setTitle(locationInfo.addressName, for: .normal)
+        guard let x = Double(locationInfo.x), let y = Double(locationInfo.y) else { return }
+        searchingLocation = CLLocation(latitude: y, longitude: x)
+        guard let searchingLocation = searchingLocation else { return }
+        moveCamera(to: searchingLocation, while: 0)
+        getStores(from: searchingLocation)
+    }
+}
