@@ -59,7 +59,7 @@ final class AddressTableViewCell: UITableViewCell {
     private func setCellContents(with locationInfo: LocationInfo?) {
         guard let locationInfo = locationInfo else { return }
         storeNameLabel.text = locationInfo.placeName
-        addressLabel.text = locationInfo.roadAddress
+        addressLabel.text = locationInfo.addressName
     }
     
     // MARK: - configure

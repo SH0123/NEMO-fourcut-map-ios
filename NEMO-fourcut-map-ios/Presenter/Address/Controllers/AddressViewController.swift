@@ -8,12 +8,18 @@
 import Foundation
 import UIKit
 
+protocol AddressViewControllerDelegate: AnyObject {
+    func setSearchAddress(locationInfo: LocationInfo) -> Void
+}
+
 final class AddressViewController: UIViewController {
     enum Size {
         static let sidePadding: CGFloat = 24
     }
     
-    private let addressResults: [LocationInfo]? = LocationInfoMockData.mockData
+    weak var delegate: AddressViewControllerDelegate?
+    private var addressResults: [LocationInfo]? = []
+    private let getLocationsUseCase: GetLocationsUseCase = GetLocationsUseCase()
     private var addressResultsStatus: AddressResultsStatus {
         get {
             return AddressResultsStatus(results: addressResults)
@@ -153,7 +159,13 @@ final class AddressViewController: UIViewController {
 
 extension AddressViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        print("hello")
+        if case AddressResultsStatus.notEmpty = addressResultsStatus {
+            tableView.deselectRow(at: indexPath, animated: true)
+            guard let addressResults = addressResults else { return }
+            let locationInfo = addressResults[indexPath.row]
+            delegate?.setSearchAddress(locationInfo: locationInfo)
+            self.dismiss(animated: true)
+        }
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
@@ -195,10 +207,19 @@ extension AddressViewController: UITableViewDataSource {
     }
 }
 
+// MARK: - UITextFieldDelegate
+
 extension AddressViewController: UITextFieldDelegate {
     
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-        //TODO: 엔터 버튼에 따른 검색 처리 action
+        guard let keyword = textField.text else { return true }
+        getLocationsUseCase.getLocations(keyword: keyword) { [weak self] locationList, error in
+            guard error == nil else { return }
+            self?.addressResults = locationList
+            print(self?.addressResults)
+            textField.resignFirstResponder()
+            self?.addressTableView.reloadData()
+        }
         return true
     }
 }

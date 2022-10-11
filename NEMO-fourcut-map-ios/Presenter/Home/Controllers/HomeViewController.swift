@@ -17,6 +17,7 @@ final class HomeViewController: UIViewController {
         static let layoutInset: CGFloat = 24
     }    
     
+    private let addressViewController = AddressViewController()
     private let getAllStoresUseCase: GetAllStoresUseCase = GetAllStoresUseCase()
     private let locationManager = LocationManager.shared
     private var markers: [NMFMarker] = []
@@ -209,7 +210,6 @@ final class HomeViewController: UIViewController {
     }
     
     @objc private func touchAddressButton() {
-        let addressViewController = AddressViewController()
         addressViewController.modalPresentationStyle = .fullScreen
         self.present(addressViewController, animated: true)
     }
@@ -219,6 +219,7 @@ final class HomeViewController: UIViewController {
     private func configureDelegate() {
         storeCollectionView.dataSource = self
         storeCollectionView.delegate = self
+        addressViewController.delegate = self
     }
     
     private func configureAddsubview() {
@@ -331,3 +332,14 @@ extension HomeViewController: NMFMapViewCameraDelegate {
          }
      }
  }
+
+extension HomeViewController: AddressViewControllerDelegate {
+    func setSearchAddress(locationInfo: LocationInfo) {
+        addressButton.setTitle(locationInfo.addressName, for: .normal)
+        guard let x = Double(locationInfo.x), let y = Double(locationInfo.y) else { return }
+        searchingLocation = CLLocation(latitude: y, longitude: x)
+        guard let searchingLocation = searchingLocation else { return }
+        moveCamera(to: searchingLocation, while: 0)
+        getStores(from: searchingLocation)
+    }
+}

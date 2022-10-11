@@ -7,11 +7,11 @@
 
 import Foundation
 import Alamofire
-import CoreLocation
 
 final class StoreKakaoMapRepository: StoreRepository {
     
     static let shared = StoreKakaoMapRepository()
+    private let locationManager = LocationManager.shared
     private var stores: [FourcutStore] = []
     private var error: Error?
     
@@ -38,7 +38,9 @@ final class StoreKakaoMapRepository: StoreRepository {
     private func getEachStore(dispatchGroup: DispatchGroup, store: FourcutBrand, longtitude x: Double, latitude y: Double) {
         dispatchGroup.enter()
         
-        let currentLocation = CLLocation(latitude: y, longitude: x)
+        locationManager.settingLocationManager()
+        guard let currentLocation = locationManager.getCurrentLocation() else { return }
+        
         let headers: HTTPHeaders = [
             "Authorization": "KakaoAK 7c09c34ede09a5c5ea55da86506a63bb"
         ]

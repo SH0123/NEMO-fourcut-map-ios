@@ -15,6 +15,8 @@ final class LocationKakaoMapRepository: LocationRepository {
     private init() { }
     
     func getLocations(keyword: String, _ completionHandler: @escaping ([LocationInfo], Error?) -> Void) {
+        clearStores()
+        
         let headers: HTTPHeaders = [
             "Authorization": "KakaoAK 7c09c34ede09a5c5ea55da86506a63bb"
         ]
@@ -31,4 +33,6 @@ final class LocationKakaoMapRepository: LocationRepository {
             completionHandler(self.stores, response.error)
         }
     }
+    
+    private func clearStores() { stores = [] }
 }
