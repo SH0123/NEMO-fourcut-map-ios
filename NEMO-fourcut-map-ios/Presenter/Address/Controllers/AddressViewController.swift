@@ -18,7 +18,7 @@ final class AddressViewController: UIViewController {
     }
     
     weak var delegate: AddressViewControllerDelegate?
-    private var addressResults: [LocationInfo]? = []
+    private var addressResults: [LocationInfo]? = nil
     private let getLocationsUseCase: GetLocationsUseCase = GetLocationsUseCase()
     private var addressResultsStatus: AddressResultsStatus {
         get {
@@ -84,7 +84,17 @@ final class AddressViewController: UIViewController {
         configureDelegate()
     }
     
-    // MARK: - closure & function
+    override func viewWillAppear(_ animated: Bool) {
+        clearHistory()
+    }
+    
+    // MARK: - function
+    
+    private func clearHistory() {
+        addressResults = nil
+        searchTextField.text = ""
+        addressTableView.reloadData()
+    }
     
     // MARK: - objc function
     
@@ -216,7 +226,6 @@ extension AddressViewController: UITextFieldDelegate {
         getLocationsUseCase.getLocations(keyword: keyword) { [weak self] locationList, error in
             guard error == nil else { return }
             self?.addressResults = locationList
-            print(self?.addressResults)
             textField.resignFirstResponder()
             self?.addressTableView.reloadData()
         }

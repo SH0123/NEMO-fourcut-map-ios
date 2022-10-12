@@ -19,6 +19,7 @@ final class HomeViewController: UIViewController {
     
     private let addressViewController = AddressViewController()
     private let getAllStoresUseCase: GetAllStoresUseCase = GetAllStoresUseCase()
+    private let getAddressUseCase: GetAddressUseCase = GetAddressUseCase()
     private let locationManager = LocationManager.shared
     private var markers: [NMFMarker] = []
     private lazy var storeList: [FourcutStore] = [] {
@@ -40,7 +41,7 @@ final class HomeViewController: UIViewController {
     }()
     private lazy var addressButton: UIButton = {
         let button = UIButton()
-        button.setTitle("서울특별시 양천구 목동로 212", for: .normal)
+        button.setTitle("주소 정보를 불러오지 못했습니다", for: .normal)
         button.setTitleColor(UIColor.black, for: .normal)
         button.titleLabel?.font = UIFont.contentsAccent
         button.setImage(ImageLiterals.downArrow, for: .normal)
@@ -116,6 +117,7 @@ final class HomeViewController: UIViewController {
         configureDelegate()
         initMap()
         getStores(from: self.locationManager.getCurrentLocation())
+        setAddressButtonLabel(with: self.locationManager.getCurrentLocation())
     }
     
     // MARK: - closure & function
@@ -134,7 +136,7 @@ final class HomeViewController: UIViewController {
             guard let self = self else { return }
             guard error == nil else { return }
             self.storeList = stores.sorted(by: {$0.distance < $1.distance})
-            print(self.storeList)
+//            print(self.storeList)
             DispatchQueue.main.async {
                 self.storeCollectionView.reloadData()
             }
@@ -161,6 +163,7 @@ final class HomeViewController: UIViewController {
                 let pageWidthIncludingSpace = HomeStoreCell.itemSize.width + Size.minimumInterItem
                 self.currentPageIndex = CGFloat(idx)
                 self.storeCollectionView.contentOffset.x = self.currentPageIndex * pageWidthIncludingSpace - Size.contentInset
+                self.selectMarker(selectedIdx: idx)
                 return true
             }
             markers.append(marker)
@@ -193,6 +196,16 @@ final class HomeViewController: UIViewController {
         marker.width = width
         marker.height = height
     }
+    
+    private func setAddressButtonLabel(with location: CLLocation?) {
+        guard let longtitude = location?.coordinate.longitude, let latitude = location?.coordinate.latitude else { return }
+        getAddressUseCase.getAddress(longtitude: longtitude, latitude: latitude) { [weak self] address, error in
+            DispatchQueue.main.async {
+                self?.addressButton.setTitle(address.addressName, for: .normal)
+            }
+        }
+        
+    }
 
     // MARK: - objc function
         
@@ -201,6 +214,7 @@ final class HomeViewController: UIViewController {
         guard let currentLocation = locationManager.getCurrentLocation() else { return }
         self.moveCamera(to: currentLocation, while: 0.5)
         self.getStores(from: currentLocation)
+        self.setAddressButtonLabel(with: currentLocation)
         researchButton.isHidden = true
     }
     
@@ -335,7 +349,7 @@ extension HomeViewController: NMFMapViewCameraDelegate {
 
 extension HomeViewController: AddressViewControllerDelegate {
     func setSearchAddress(locationInfo: LocationInfo) {
-        addressButton.setTitle(locationInfo.addressName, for: .normal)
+        self.addressButton.setTitle(locationInfo.addressName, for: .normal)
         guard let x = Double(locationInfo.x), let y = Double(locationInfo.y) else { return }
         searchingLocation = CLLocation(latitude: y, longitude: x)
         guard let searchingLocation = searchingLocation else { return }

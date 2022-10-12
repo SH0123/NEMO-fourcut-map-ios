@@ -8,14 +8,14 @@
 import Foundation
 
 final class GetLocationsUseCase {
-    private let locationRepository: LocationRepository
+    private let locationService: LocationService
     
-    init(locationRepository: LocationRepository = LocationKakaoMapRepository.shared) {
-        self.locationRepository = locationRepository
+    init(locationService: LocationService = KakaoLocationService.shared) {
+        self.locationService = locationService
     }
     
     func getLocations(keyword: String, _ completionHandler: @escaping ([LocationInfo], Error?) -> Void) {
-        locationRepository.getLocations(keyword: keyword) { locationInfoList, error in
+        locationService.requestLocations(keyword: keyword) { locationInfoList, error in
             completionHandler(locationInfoList, error)
         }
     }
