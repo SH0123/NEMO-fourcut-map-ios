@@ -32,6 +32,7 @@ final class HomeViewController: UIViewController {
     }
     private var currentPageIndex: CGFloat = 0
     private var searchingLocation: CLLocation?
+    private var currentLocationAddress: String = ""
     
     private let mapView: NMFMapView = {
         let mapView = NMFMapView()
@@ -78,6 +79,7 @@ final class HomeViewController: UIViewController {
                                     backgroundColor: UIColor.white,
                                    radius: 15,
                                    top: 8, left: 16, bottom: 8, right: 16)
+        button.addTarget(self, action: #selector(turnToList), for: .touchUpInside)
         return button
     }()
     
@@ -200,11 +202,11 @@ final class HomeViewController: UIViewController {
     private func setAddressButtonLabel(with location: CLLocation?) {
         guard let longtitude = location?.coordinate.longitude, let latitude = location?.coordinate.latitude else { return }
         getAddressUseCase.getAddress(longtitude: longtitude, latitude: latitude) { [weak self] address, error in
+            self?.currentLocationAddress = address.addressName
             DispatchQueue.main.async {
                 self?.addressButton.setTitle(address.addressName, for: .normal)
             }
         }
-        
     }
 
     // MARK: - objc function
@@ -220,12 +222,22 @@ final class HomeViewController: UIViewController {
     
     @objc private func researchStores() {
         self.getStores(from: searchingLocation)
+        self.setAddressButtonLabel(with: searchingLocation)
         researchButton.isHidden = true
     }
     
     @objc private func touchAddressButton() {
         addressViewController.modalPresentationStyle = .fullScreen
         self.present(addressViewController, animated: true)
+    }
+    
+    @objc private func turnToList() {
+        let storeListViewController = StoreListViewController()
+        storeListViewController.bindingData(addressName: currentLocationAddress,
+                                            stores: storeList
+        )
+        storeListViewController.modalPresentationStyle = .fullScreen
+        self.present(storeListViewController, animated: true)
     }
     
     // MARK: - configure
