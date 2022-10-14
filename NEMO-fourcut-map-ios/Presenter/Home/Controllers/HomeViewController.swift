@@ -42,7 +42,7 @@ final class HomeViewController: UIViewController {
     }()
     private lazy var addressButton: UIButton = {
         let button = UIButton()
-        button.setTitle("주소 정보를 불러오지 못했습니다", for: .normal)
+        button.setTitle("", for: .normal)
         button.setTitleColor(UIColor.black, for: .normal)
         button.titleLabel?.font = UIFont.contentsAccent
         button.setImage(ImageLiterals.downArrow, for: .normal)
@@ -77,7 +77,7 @@ final class HomeViewController: UIViewController {
         button.titleLabel?.font = UIFont.contentsDefault
         button = button.setButtonProperty(
                                     backgroundColor: UIColor.white,
-                                   radius: 15,
+                                   radius: 20,
                                    top: 8, left: 16, bottom: 8, right: 16)
         button.addTarget(self, action: #selector(turnToList), for: .touchUpInside)
         return button
@@ -164,7 +164,7 @@ final class HomeViewController: UIViewController {
                 guard let self = self else { return false }
                 let pageWidthIncludingSpace = HomeStoreCell.itemSize.width + Size.minimumInterItem
                 self.currentPageIndex = CGFloat(idx)
-                self.storeCollectionView.contentOffset.x = self.currentPageIndex * pageWidthIncludingSpace - Size.contentInset
+                self.storeCollectionView.scrollToItem(at: IndexPath(row: idx, section: 0), at: .centeredHorizontally, animated: true)
                 self.selectMarker(selectedIdx: idx)
                 return true
             }
@@ -284,7 +284,8 @@ final class HomeViewController: UIViewController {
         
         turnToListButton.snp.makeConstraints {
             $0.bottom.equalTo(storeCollectionView.snp.top).offset(-10)
-            $0.height.equalTo(30)
+            $0.width.equalTo(90)
+            $0.height.equalTo(40)
             $0.centerX.equalTo(researchButton)
         }
         

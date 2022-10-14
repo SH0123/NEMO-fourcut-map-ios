@@ -13,7 +13,7 @@ extension UIButton {
         self.backgroundColor = backgroundColor
         self.layer.cornerRadius = radius
         self.contentEdgeInsets = UIEdgeInsets(top: top, left: left, bottom: bottom, right: right)
-        self.layer.applyShadow()
+        self.layer.applyShadow(alpha: 0.15, x: 0, y: 1)
         return self
     }
 }
