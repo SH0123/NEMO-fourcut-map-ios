@@ -32,6 +32,7 @@ final class HomeViewController: UIViewController {
     }
     private var currentPageIndex: CGFloat = 0
     private var searchingLocation: CLLocation?
+    private var currentLocationAddress: String = ""
     
     private let mapView: NMFMapView = {
         let mapView = NMFMapView()
@@ -41,7 +42,7 @@ final class HomeViewController: UIViewController {
     }()
     private lazy var addressButton: UIButton = {
         let button = UIButton()
-        button.setTitle("주소 정보를 불러오지 못했습니다", for: .normal)
+        button.setTitle("", for: .normal)
         button.setTitleColor(UIColor.black, for: .normal)
         button.titleLabel?.font = UIFont.contentsAccent
         button.setImage(ImageLiterals.downArrow, for: .normal)
@@ -76,8 +77,9 @@ final class HomeViewController: UIViewController {
         button.titleLabel?.font = UIFont.contentsDefault
         button = button.setButtonProperty(
                                     backgroundColor: UIColor.white,
-                                   radius: 15,
+                                   radius: 20,
                                    top: 8, left: 16, bottom: 8, right: 16)
+        button.addTarget(self, action: #selector(turnToList), for: .touchUpInside)
         return button
     }()
     
@@ -162,7 +164,7 @@ final class HomeViewController: UIViewController {
                 guard let self = self else { return false }
                 let pageWidthIncludingSpace = HomeStoreCell.itemSize.width + Size.minimumInterItem
                 self.currentPageIndex = CGFloat(idx)
-                self.storeCollectionView.contentOffset.x = self.currentPageIndex * pageWidthIncludingSpace - Size.contentInset
+                self.storeCollectionView.scrollToItem(at: IndexPath(row: idx, section: 0), at: .centeredHorizontally, animated: true)
                 self.selectMarker(selectedIdx: idx)
                 return true
             }
@@ -200,11 +202,11 @@ final class HomeViewController: UIViewController {
     private func setAddressButtonLabel(with location: CLLocation?) {
         guard let longtitude = location?.coordinate.longitude, let latitude = location?.coordinate.latitude else { return }
         getAddressUseCase.getAddress(longtitude: longtitude, latitude: latitude) { [weak self] address, error in
+            self?.currentLocationAddress = address.addressName
             DispatchQueue.main.async {
                 self?.addressButton.setTitle(address.addressName, for: .normal)
             }
         }
-        
     }
 
     // MARK: - objc function
@@ -220,12 +222,22 @@ final class HomeViewController: UIViewController {
     
     @objc private func researchStores() {
         self.getStores(from: searchingLocation)
+        self.setAddressButtonLabel(with: searchingLocation)
         researchButton.isHidden = true
     }
     
     @objc private func touchAddressButton() {
         addressViewController.modalPresentationStyle = .fullScreen
         self.present(addressViewController, animated: true)
+    }
+    
+    @objc private func turnToList() {
+        let storeListViewController = StoreListViewController()
+        storeListViewController.bindingData(addressName: currentLocationAddress,
+                                            stores: storeList
+        )
+        storeListViewController.modalPresentationStyle = .fullScreen
+        self.present(storeListViewController, animated: true)
     }
     
     // MARK: - configure
@@ -272,7 +284,8 @@ final class HomeViewController: UIViewController {
         
         turnToListButton.snp.makeConstraints {
             $0.bottom.equalTo(storeCollectionView.snp.top).offset(-10)
-            $0.height.equalTo(30)
+            $0.width.equalTo(90)
+            $0.height.equalTo(40)
             $0.centerX.equalTo(researchButton)
         }
         
