@@ -13,7 +13,7 @@ class StoreListViewController: UIViewController {
         static let sidePadding: CGFloat = 24
     }
     
-    private var storeList: [FourcutStore] = []
+    var storeList: [FourcutStore] = []
     private var selectedCategoryIdx = 0
     private let categoryNameList: [String] = ["전체"] + FourcutBrand.allCases.map { $0.rawKoreanString }
     
@@ -33,7 +33,7 @@ class StoreListViewController: UIViewController {
     }()
     private lazy var titleStack: UIStackView = {
         let stackView = UIStackView(arrangedSubviews: [addressLabel,
-                                                      titleLabel])
+                                                       titleLabel])
         stackView.axis = .vertical
         stackView.distribution = .fillProportionally
         stackView.spacing = 5
@@ -86,6 +86,16 @@ class StoreListViewController: UIViewController {
         stackView.spacing = 16
         stackView.alignment = .center
         return stackView
+    }()
+    private let storeTableView: UITableView = {
+        let tableView = UITableView()
+        tableView.register(StoreTableCell.self, forCellReuseIdentifier: StoreTableCell.registerId)
+        tableView.register(EmptyStoreTableCell.self, forCellReuseIdentifier: EmptyStoreTableCell.registerId)
+        tableView.showsVerticalScrollIndicator = false
+        tableView.alwaysBounceVertical = false
+        tableView.separatorStyle = .none
+        tableView.backgroundColor = .background
+        return tableView
     }()
     private lazy var turnToMapButton: UIButton = {
         var button = UIButton()
@@ -141,6 +151,8 @@ class StoreListViewController: UIViewController {
     private func configureDelegate() {
         categoryCollectionView.dataSource = self
         categoryCollectionView.delegate = self
+        storeTableView.delegate = self
+        storeTableView.dataSource = self
     }
     
     private func configureUI() {
@@ -156,6 +168,7 @@ class StoreListViewController: UIViewController {
             categoryCollectionView,
             divideLine,
             buttonStackView,
+            storeTableView,
             turnToMapButton
         )
     }
@@ -183,6 +196,12 @@ class StoreListViewController: UIViewController {
         buttonStackView.snp.makeConstraints {
             $0.top.equalTo(divideLine.snp.bottom).offset(28)
             $0.trailing.equalToSuperview().inset(Size.sidePadding)
+        }
+        
+        storeTableView.snp.makeConstraints {
+            $0.leading.trailing.equalToSuperview().inset(Size.sidePadding)
+            $0.top.equalTo(buttonStackView.snp.bottom).offset(16)
+            $0.bottom.equalTo(safeAreaLayoutGuide)
         }
         
         turnToMapButton.snp.makeConstraints {
@@ -221,5 +240,40 @@ extension StoreListViewController: UICollectionViewDelegateFlowLayout {
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: StoreCategoryCell.registerId, for: indexPath) as? StoreCategoryCell else { return .zero }
         let text = categoryNameList[indexPath.row]
         return cell.getProperCellWidth(cellHeight: StoreCategoryCell.cellHeight, text: text)
+    }
+}
+
+extension StoreListViewController: UITableViewDelegate {
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        print("select action")
+    }
+    
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        if storeList.isEmpty {
+            return storeTableView.frame.height
+        } else {
+            return StoreTableCell.itemHeight
+        }
+    }
+}
+
+extension StoreListViewController: UITableViewDataSource {
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        if storeList.isEmpty {
+            guard let cell = tableView.dequeueReusableCell(withIdentifier: EmptyStoreTableCell.registerId, for: indexPath) as? EmptyStoreTableCell else { return EmptyStoreTableCell() }
+            return cell
+        } else {
+            guard let cell = tableView.dequeueReusableCell(withIdentifier: StoreTableCell.registerId, for: indexPath) as? StoreTableCell else { return StoreTableCell() }
+            cell.setCellContents(with: storeList[indexPath.row])
+            return cell
+
+        }
+    }
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        if storeList.isEmpty {
+            return 1
+        } else {
+            return storeList.count
+        }
     }
 }
