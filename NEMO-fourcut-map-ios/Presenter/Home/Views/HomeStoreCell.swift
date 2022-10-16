@@ -76,7 +76,7 @@ final class HomeStoreCell: UICollectionViewCell {
     
     private let distanceLabel: UILabel = {
         let label = UILabel()
-        label.text = "-1m"
+        label.text = "-1"
         label.font = UIFont.mini
         return label
     }()
@@ -97,11 +97,7 @@ final class HomeStoreCell: UICollectionViewCell {
         guard let store  = store else { return }
         storeNameLabel.text = store.placeName
         brandCharacterView.image = store.storeType?.brandImage
-        distanceLabel.text = over1km(distance: store.distance)
-    }
-    
-    private func over1km(distance: Int) -> String {
-        return distance >= 1000 ? "1km+" : "\(distance)m"
+        distanceLabel.text = store.stringDistanceWithKm
     }
     
     // MARK: - configure

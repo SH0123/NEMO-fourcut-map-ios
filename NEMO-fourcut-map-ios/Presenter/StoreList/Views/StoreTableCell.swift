@@ -75,7 +75,7 @@ class StoreTableCell: UITableViewCell {
         stackView.axis = .horizontal
         stackView.distribution = .fill
         stackView.spacing = 8
-        stackView.alignment = .center
+        stackView.alignment = .fill
         return stackView
     }()
     
@@ -84,7 +84,7 @@ class StoreTableCell: UITableViewCell {
         stackView.axis = .horizontal
         stackView.distribution = .fill
         stackView.spacing = 8
-        stackView.alignment = .center
+        stackView.alignment = .fill
         return stackView
     }()
 
@@ -93,8 +93,16 @@ class StoreTableCell: UITableViewCell {
         stackView.axis = .horizontal
         stackView.distribution = .fill
         stackView.spacing = 8
+        stackView.alignment = .fill
+        return stackView
+    }()
+    
+    private lazy var underStack: UIStackView = {
+        let stackView = UIStackView(arrangedSubviews: [distanceStack, starStack, heartStack])
+        stackView.axis = .horizontal
+        stackView.distribution = .fill
+        stackView.spacing = 20
         stackView.alignment = .center
-        
         return stackView
     }()
 
@@ -118,6 +126,7 @@ class StoreTableCell: UITableViewCell {
     func setCellContents(with store: FourcutStore?) {
         guard let store = store else { return }
         storeNameLabel.text = store.placeName
+        distanceLabel.text = store.stringDistanceWithKm
     }
     
     // MARK: - configure
@@ -126,9 +135,7 @@ class StoreTableCell: UITableViewCell {
         contentView.addSubviews(
             container,
             storeNameLabel,
-            starStack,
-            distanceStack,
-            heartStack
+            underStack
         )
     }
     
@@ -142,19 +149,9 @@ class StoreTableCell: UITableViewCell {
             $0.centerX.equalToSuperview()
         }
         
-        distanceStack.snp.makeConstraints {
-            $0.centerX.equalTo(storeNameLabel.snp.centerX)
+        underStack.snp.makeConstraints {
             $0.centerY.equalTo(container.snp.centerY).offset(20)
-        }
-        
-        starStack.snp.makeConstraints {
-            $0.trailing.equalTo(distanceStack.snp.leading).offset(-40)
-            $0.centerY.equalTo(distanceStack.snp.centerY)
-        }
-        
-        heartStack.snp.makeConstraints {
-            $0.leading.equalTo(distanceStack.snp.trailing).offset(50)
-            $0.centerY.equalTo(distanceStack.snp.centerY)
+            $0.centerX.equalToSuperview()
         }
         
         starImage.snp.makeConstraints {

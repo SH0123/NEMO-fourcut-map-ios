@@ -44,7 +44,7 @@ final class StoreKakaoMapRepository: StoreRepository {
         let headers: HTTPHeaders = [
             "Authorization": "KakaoAK 7c09c34ede09a5c5ea55da86506a63bb"
         ]
-        let radius = 1500
+        let radius = 2000
         let parameters: [String: Any] = [
                     "query": store.rawKoreanString,
                     "page": 1,

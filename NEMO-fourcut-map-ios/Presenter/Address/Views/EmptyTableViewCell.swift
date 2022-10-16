@@ -21,7 +21,7 @@ final class EmptyTableViewCell: UITableViewCell {
         let label = UILabel()
         label.text = "검색 결과가 없어요"
         label.font = UIFont.contentsAccent
-        label.textColor = .customBlack
+        label.textColor = .customMidBlack
         return label
     }()
     
@@ -29,7 +29,7 @@ final class EmptyTableViewCell: UITableViewCell {
         let label = UILabel()
         label.text = "구, 동, 역 등으로 다시 검색해주세요"
         label.font = UIFont.contentsAccent
-        label.textColor = .customBlack
+        label.textColor = .customMidBlack
         return label
     }()
     
