@@ -41,14 +41,6 @@ class StoreTableCell: UITableViewCell {
         label.font = UIFont.contentsDefault
         return label
     }()
-    private lazy var starStack: UIStackView = {
-        let stackView = UIStackView(arrangedSubviews: [starImage, starLabel])
-        stackView.axis = .horizontal
-        stackView.distribution = .fillProportionally
-        stackView.spacing = 8
-        stackView.alignment = .center
-        return stackView
-    }()
     
     private let heartImage: UIImageView = {
         let imageView = UIImageView()
@@ -59,7 +51,7 @@ class StoreTableCell: UITableViewCell {
     
     private let heartLabel: UILabel = {
         let label = UILabel()
-        label.text = "0"
+        label.text = "30"
         label.font = UIFont.contentsDefault
         return label
     }()
@@ -78,6 +70,34 @@ class StoreTableCell: UITableViewCell {
         return label
     }()
     
+    private lazy var starStack: UIStackView = {
+        let stackView = UIStackView(arrangedSubviews: [starImage, starLabel])
+        stackView.axis = .horizontal
+        stackView.distribution = .fill
+        stackView.spacing = 8
+        stackView.alignment = .center
+        return stackView
+    }()
+    
+    private lazy var distanceStack: UIStackView = {
+        let stackView = UIStackView(arrangedSubviews: [distanceImage, distanceLabel])
+        stackView.axis = .horizontal
+        stackView.distribution = .fill
+        stackView.spacing = 8
+        stackView.alignment = .center
+        return stackView
+    }()
+
+    private lazy var heartStack: UIStackView = {
+        let stackView = UIStackView(arrangedSubviews: [heartImage, heartLabel])
+        stackView.axis = .horizontal
+        stackView.distribution = .fill
+        stackView.spacing = 8
+        stackView.alignment = .center
+        
+        return stackView
+    }()
+
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         configureAddsubviews()
@@ -107,10 +127,8 @@ class StoreTableCell: UITableViewCell {
             container,
             storeNameLabel,
             starStack,
-            distanceImage,
-            distanceLabel,
-            heartImage,
-            heartLabel
+            distanceStack,
+            heartStack
         )
     }
     
@@ -120,18 +138,35 @@ class StoreTableCell: UITableViewCell {
         }
         
         storeNameLabel.snp.makeConstraints {
+            $0.centerY.equalTo(container.snp.centerY).offset(-20)
             $0.centerX.equalToSuperview()
-            $0.top.equalToSuperview().inset(8)
+        }
+        
+        distanceStack.snp.makeConstraints {
+            $0.centerX.equalTo(storeNameLabel.snp.centerX)
+            $0.centerY.equalTo(container.snp.centerY).offset(20)
         }
         
         starStack.snp.makeConstraints {
-            $0.centerX.equalToSuperview()
-            $0.bottom.equalToSuperview().inset(8)
+            $0.trailing.equalTo(distanceStack.snp.leading).offset(-40)
+            $0.centerY.equalTo(distanceStack.snp.centerY)
+        }
+        
+        heartStack.snp.makeConstraints {
+            $0.leading.equalTo(distanceStack.snp.trailing).offset(50)
+            $0.centerY.equalTo(distanceStack.snp.centerY)
         }
         
         starImage.snp.makeConstraints {
             $0.size.equalTo(18)
         }
         
+        distanceImage.snp.makeConstraints {
+            $0.size.equalTo(18)
+        }
+        
+        heartImage.snp.makeConstraints {
+            $0.size.equalTo(18)
+        }
     }
 }
