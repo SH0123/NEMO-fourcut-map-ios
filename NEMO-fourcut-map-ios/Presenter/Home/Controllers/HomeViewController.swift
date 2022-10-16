@@ -236,6 +236,7 @@ final class HomeViewController: UIViewController {
         storeListViewController.bindingData(addressName: currentLocationAddress,
                                             stores: storeList
         )
+        storeListViewController.storeList = storeList
         storeListViewController.modalPresentationStyle = .fullScreen
         self.present(storeListViewController, animated: true)
     }

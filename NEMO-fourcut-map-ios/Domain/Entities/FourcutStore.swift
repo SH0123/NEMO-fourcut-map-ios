@@ -31,6 +31,20 @@ struct FourcutStore {
     }
 }
 
+extension FourcutStore {
+    var stringDistanceWithKm: String {
+        if distance >= 2000 {
+            return "2km+"
+        }
+        else if distance >= 1000, distance < 2000 {
+            let km = distance / 1000
+            let m = (distance - km * 1000) / 100
+            return m == 0 ? "\(km)km" : "\(km).\(m)km"
+        } else {
+            return "\(distance)m"
+        }
+    }
+}
 
 struct Stores: Decodable {
     let all: [LocationInfo]
