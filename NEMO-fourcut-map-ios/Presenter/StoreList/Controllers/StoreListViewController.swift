@@ -14,14 +14,16 @@ class StoreListViewController: UIViewController {
     }
     
     var storeList: [FourcutStore] = []
+    private lazy var filteredStoreList: [FourcutStore] = storeList
+    private let filters: [StoreFilter] = [EmptyFilter(), LifeFourcutFilter(), HaruFilmFilter(), SelpixFilter(), PhotoSignatureFilter(), PhotoismFilter()]
+    private lazy var storeNameList = filters.map { $0.filterName }
     private var selectedCategoryIdx = 0
-    private let categoryNameList: [String] = ["전체"] + FourcutBrand.allCases.map { $0.rawKoreanString }
     
     private let addressLabel: UILabel = {
         let label = UILabel()
         label.text = ""
         label.font = UIFont.contentsDefaultAccent
-        label.textColor = .darkGray
+        label.textColor = .customMidBlack
         return label
     }()
     private let titleLabel: UILabel = {
@@ -93,7 +95,6 @@ class StoreListViewController: UIViewController {
         tableView.register(EmptyStoreTableCell.self, forCellReuseIdentifier: EmptyStoreTableCell.registerId)
         tableView.showsVerticalScrollIndicator = false
         tableView.alwaysBounceVertical = false
-        tableView.separatorStyle = .none
         tableView.backgroundColor = .background
         return tableView
     }()
@@ -218,7 +219,7 @@ class StoreListViewController: UIViewController {
 extension StoreListViewController: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: StoreCategoryCell.registerId, for: indexPath) as? StoreCategoryCell else { return StoreCategoryCell() }
-        cell.setLabel(with: categoryNameList[indexPath.row])
+        cell.setLabel(with: storeNameList[indexPath.row])
         if indexPath.row == 0 {
             cell.isSelected = true
             collectionView.selectItem(at: indexPath, animated: true, scrollPosition: .init())
@@ -227,7 +228,7 @@ extension StoreListViewController: UICollectionViewDataSource {
     }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return categoryNameList.count
+        return filters.count
     }
 }
 
@@ -238,18 +239,28 @@ extension StoreListViewController: UICollectionViewDelegateFlowLayout {
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: StoreCategoryCell.registerId, for: indexPath) as? StoreCategoryCell else { return .zero }
-        let text = categoryNameList[indexPath.row]
+        let text = storeNameList[indexPath.row]
         return cell.getProperCellWidth(cellHeight: StoreCategoryCell.cellHeight, text: text)
+    }
+}
+
+extension StoreListViewController: UICollectionViewDelegate {
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        let filter = filters[indexPath.row]
+        filteredStoreList = filter.filterStore(storeList)
+        storeTableView.reloadData()
     }
 }
 
 extension StoreListViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        print("select action")
+        if !filteredStoreList.isEmpty {
+            tableView.deselectRow(at: indexPath, animated: true)
+        }
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        if storeList.isEmpty {
+        if filteredStoreList.isEmpty {
             return storeTableView.frame.height
         } else {
             return StoreTableCell.itemHeight
@@ -259,21 +270,23 @@ extension StoreListViewController: UITableViewDelegate {
 
 extension StoreListViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        if storeList.isEmpty {
+        if filteredStoreList.isEmpty {
             guard let cell = tableView.dequeueReusableCell(withIdentifier: EmptyStoreTableCell.registerId, for: indexPath) as? EmptyStoreTableCell else { return EmptyStoreTableCell() }
+            cell.selectionStyle = .none
             return cell
         } else {
             guard let cell = tableView.dequeueReusableCell(withIdentifier: StoreTableCell.registerId, for: indexPath) as? StoreTableCell else { return StoreTableCell() }
-            cell.setCellContents(with: storeList[indexPath.row])
+            cell.setCellContents(with: filteredStoreList[indexPath.row])
             return cell
 
         }
     }
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        if storeList.isEmpty {
+        if filteredStoreList.isEmpty {
+            tableView.separatorStyle = .none
             return 1
         } else {
-            return storeList.count
+            return filteredStoreList.count
         }
     }
 }
