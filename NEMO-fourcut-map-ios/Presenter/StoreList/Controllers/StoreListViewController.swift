@@ -95,6 +95,7 @@ class StoreListViewController: UIViewController {
         tableView.register(EmptyStoreTableCell.self, forCellReuseIdentifier: EmptyStoreTableCell.registerId)
         tableView.showsVerticalScrollIndicator = false
         tableView.alwaysBounceVertical = false
+        tableView.separatorStyle = .none
         tableView.backgroundColor = .background
         return tableView
     }()
@@ -254,9 +255,7 @@ extension StoreListViewController: UICollectionViewDelegate {
 
 extension StoreListViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        if !filteredStoreList.isEmpty {
-            tableView.deselectRow(at: indexPath, animated: true)
-        }
+        
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
@@ -277,13 +276,13 @@ extension StoreListViewController: UITableViewDataSource {
         } else {
             guard let cell = tableView.dequeueReusableCell(withIdentifier: StoreTableCell.registerId, for: indexPath) as? StoreTableCell else { return StoreTableCell() }
             cell.setCellContents(with: filteredStoreList[indexPath.row])
+            cell.selectionStyle = .none
             return cell
 
         }
     }
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         if filteredStoreList.isEmpty {
-            tableView.separatorStyle = .none
             return 1
         } else {
             return filteredStoreList.count
