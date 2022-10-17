@@ -53,6 +53,7 @@ class EmptyStoreTableCell: UITableViewCell {
     private func configureConstraints() {
         emptyStackView.snp.makeConstraints {
             $0.height.equalTo(300)
+            $0.center.equalToSuperview()
         }
         
         emptyStateImageView.snp.makeConstraints {
