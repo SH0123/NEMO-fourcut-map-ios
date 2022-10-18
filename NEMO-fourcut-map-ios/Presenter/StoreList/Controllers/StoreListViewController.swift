@@ -8,7 +8,7 @@
 import UIKit
 import SnapKit
 
-class StoreListViewController: UIViewController {
+final class StoreListViewController: UIViewController {
     enum Size {
         static let sidePadding: CGFloat = 24
     }
