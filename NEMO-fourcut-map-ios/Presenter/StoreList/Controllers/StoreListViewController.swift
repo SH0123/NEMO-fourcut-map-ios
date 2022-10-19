@@ -18,6 +18,7 @@ final class StoreListViewController: UIViewController {
     private let filters: [StoreFilter] = [EmptyFilter(), LifeFourcutFilter(), HaruFilmFilter(), SelpixFilter(), PhotoSignatureFilter(), PhotoismFilter()]
     private lazy var storeNameList = filters.map { $0.filterName }
     private var selectedCategoryIdx = 0
+    private let detailStoreViewController = DetailStoreViewController()
     
     private let addressLabel: UILabel = {
         let label = UILabel()
@@ -255,6 +256,9 @@ extension StoreListViewController: UICollectionViewDelegate {
 
 extension StoreListViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let store = filteredStoreList[indexPath.row]
+        detailStoreViewController.store = store
+        navigationController?.pushViewController(detailStoreViewController, animated: true)
         
     }
     

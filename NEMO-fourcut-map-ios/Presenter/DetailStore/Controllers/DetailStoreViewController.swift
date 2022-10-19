@@ -12,12 +12,21 @@ import SnapKit
 
 final class DetailStoreViewController: UIViewController {
     
+    var store: FourcutStore? = nil {
+        didSet {
+            guard let brandName = store?.storeType?.rawKoreanString else { return }
+            setNavigationTitle(brandName)
+        }
+    }
+    
     private let mapView: NMFMapView = {
         let mapView = NMFMapView()
         mapView.zoomLevel = 14
         mapView.positionMode = .disabled
         return mapView
     }()
+    
+    private let detailCard = StoreInfoCard()
     
     private let copyToastMessage: UILabel = {
         let label = UILabel()
