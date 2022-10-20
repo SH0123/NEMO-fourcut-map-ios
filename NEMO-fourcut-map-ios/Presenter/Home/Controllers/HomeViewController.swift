@@ -239,7 +239,7 @@ final class HomeViewController: UIViewController {
         storeListViewController.storeList = storeList
         let storeListNavigationViewController = UINavigationController(rootViewController: storeListViewController)
         storeListNavigationViewController.modalPresentationStyle = .fullScreen
-        storeListNavigationViewController.isNavigationBarHidden = true
+        //storeListNavigationViewController.isNavigationBarHidden = true
         self.present(storeListNavigationViewController, animated: true)
     }
     

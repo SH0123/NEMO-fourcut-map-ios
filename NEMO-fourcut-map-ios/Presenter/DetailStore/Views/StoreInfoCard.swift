@@ -13,6 +13,7 @@ final class StoreInfoCard: UIView {
     
     var store: FourcutStore? {
         didSet {
+            print(store)
             setContents(store: store)
         }
     }
@@ -121,7 +122,7 @@ final class StoreInfoCard: UIView {
         let stackView = UIStackView(arrangedSubviews: [distanceStack, starStack, heartStack])
         stackView.axis = .horizontal
         stackView.distribution = .fill
-        stackView.spacing = 20
+        stackView.spacing = 40
         stackView.alignment = .center
         return stackView
     }()

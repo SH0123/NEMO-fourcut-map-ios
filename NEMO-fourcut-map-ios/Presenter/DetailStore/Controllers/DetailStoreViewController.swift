@@ -14,8 +14,8 @@ final class DetailStoreViewController: UIViewController {
     
     var store: FourcutStore? = nil {
         didSet {
-            guard let brandName = store?.storeType?.rawKoreanString else { return }
-            setNavigationTitle(brandName)
+            guard let store = store else { return }
+            setStoreInfo(store)
         }
     }
     
@@ -26,11 +26,7 @@ final class DetailStoreViewController: UIViewController {
         return mapView
     }()
     
-    private lazy var infoCard: StoreInfoCard = {
-        let card = StoreInfoCard()
-        card.store = store
-        return card
-    }()
+    private lazy var infoCard = StoreInfoCard()
     
     private let copyToastMessage: UILabel = {
         let label = UILabel()
@@ -68,10 +64,10 @@ final class DetailStoreViewController: UIViewController {
     }
     
     // MARK: - function
-    private func setNavigationTitle(_ brandName: String) {
-        self.navigationItem.title = brandName
+    private func setStoreInfo(_ store: FourcutStore) {
+        self.navigationItem.title = store.storeType?.rawKoreanString
+        infoCard.store = store
     }
-    
     
     // MARK: - configure
     
