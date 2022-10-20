@@ -13,9 +13,6 @@ protocol AddressViewControllerDelegate: AnyObject {
 }
 
 final class AddressViewController: UIViewController {
-    enum Size {
-        static let sidePadding: CGFloat = 24
-    }
     
     weak var delegate: AddressViewControllerDelegate?
     private var addressResults: [LocationInfo]? = nil

@@ -9,10 +9,7 @@ import UIKit
 import SnapKit
 
 final class StoreListViewController: UIViewController {
-    enum Size {
-        static let sidePadding: CGFloat = 24
-    }
-    
+   
     var storeList: [FourcutStore] = []
     private lazy var filteredStoreList: [FourcutStore] = storeList
     private let filters: [StoreFilter] = [EmptyFilter(), LifeFourcutFilter(), HaruFilmFilter(), SelpixFilter(), PhotoSignatureFilter(), PhotoismFilter()]
@@ -258,8 +255,8 @@ extension StoreListViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let store = filteredStoreList[indexPath.row]
         detailStoreViewController.store = store
-        navigationController?.pushViewController(detailStoreViewController, animated: true)
-        
+        self.navigationController?.isNavigationBarHidden = false
+        self.navigationController?.pushViewController(detailStoreViewController, animated: true)
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {

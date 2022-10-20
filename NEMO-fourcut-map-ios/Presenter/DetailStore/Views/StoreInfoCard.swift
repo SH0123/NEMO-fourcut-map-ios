@@ -11,6 +11,12 @@ import SnapKit
 
 final class StoreInfoCard: UIView {
     
+    var store: FourcutStore? {
+        didSet {
+            setContents(store: store)
+        }
+    }
+    
     private let infoCardView: UIView = {
         let view = UIView()
         view.backgroundColor = .white
@@ -18,7 +24,7 @@ final class StoreInfoCard: UIView {
         return view
     }()
     
-    private let storeNameLabel: UILabel = {
+    private lazy var storeNameLabel: UILabel = {
         let label = UILabel()
         label.text = ""
         label.font = UIFont.contentsTitle
@@ -119,11 +125,10 @@ final class StoreInfoCard: UIView {
         stackView.alignment = .center
         return stackView
     }()
-
-
     
     override init(frame: CGRect) {
         super.init(frame: frame)
+        configureUI()
         configureAddsubviews()
         configureConstraints()
     }
@@ -132,11 +137,25 @@ final class StoreInfoCard: UIView {
         super.init(coder: coder)
     }
     
+    // MARK: - fucntion
+    
+    private func setContents(store: FourcutStore?) {
+        guard let store = store else { return }
+        storeNameLabel.text = store.placeName
+        storeLocationAddressLabel.text = store.addressName
+        distanceLabel.text = store.stringDistanceWithKm
+    }
+    
     // MARK: - configure
+    
+    private func configureUI() {
+        backgroundColor = .white
+        layer.cornerRadius = 20
+        layer.applyShadow(x: 0, y: 5, blur: 15)
+    }
     
     private func configureAddsubviews() {
         self.addSubviews(
-            infoCardView,
             storeNameLabel,
             storeLocationAddressLabel,
             copyAddressButton,
@@ -145,9 +164,6 @@ final class StoreInfoCard: UIView {
     }
     
     private func configureConstraints() {
-        infoCardView.snp.makeConstraints {
-            $0.edges.equalToSuperview()
-        }
         
         storeLocationAddressLabel.snp.makeConstraints {
             $0.center.equalToSuperview()

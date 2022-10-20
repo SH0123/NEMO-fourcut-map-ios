@@ -26,7 +26,11 @@ final class DetailStoreViewController: UIViewController {
         return mapView
     }()
     
-    private let detailCard = StoreInfoCard()
+    private lazy var infoCard: StoreInfoCard = {
+        let card = StoreInfoCard()
+        card.store = store
+        return card
+    }()
     
     private let copyToastMessage: UILabel = {
         let label = UILabel()
@@ -54,8 +58,13 @@ final class DetailStoreViewController: UIViewController {
         return label
     }()
     
+    private let storeDetailInfoCard = StoreDetailInfoCard()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
+        configureUI()
+        configureAddSubviews()
+        configureConstraints()
     }
     
     // MARK: - function
@@ -71,10 +80,29 @@ final class DetailStoreViewController: UIViewController {
     }
     
     private func configureAddSubviews() {
-        
+        view.addSubviews(
+            mapView,
+            infoCard,
+            copyToastMessage,
+            storeInfoLabel,
+            updateInfoLabel,
+            storeDetailInfoCard
+        )
     }
     
     private func configureConstraints() {
+        let safeAreaLayout = view.safeAreaLayoutGuide
         
+        mapView.snp.makeConstraints {
+            $0.leading.trailing.equalToSuperview()
+            $0.top.equalTo(safeAreaLayout)
+            $0.height.equalTo(220)
+        }
+        
+        infoCard.snp.makeConstraints {
+            $0.top.equalTo(mapView.snp.bottom).offset(-44)
+            $0.leading.trailing.equalToSuperview().inset(Size.sidePadding)
+            $0.height.equalTo(160)
+        }
     }
 }

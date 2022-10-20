@@ -162,8 +162,8 @@ final class HomeViewController: UIViewController {
             marker.mapView = self.mapView
             marker.touchHandler = { [weak self] _ in
                 guard let self = self else { return false }
-                let pageWidthIncludingSpace = HomeStoreCell.itemSize.width + Size.minimumInterItem
-                self.currentPageIndex = CGFloat(idx)
+//                let pageWidthIncludingSpace = HomeStoreCell.itemSize.width + Size.minimumInterItem
+//                self.currentPageIndex = CGFloat(idx)
                 self.storeCollectionView.scrollToItem(at: IndexPath(row: idx, section: 0), at: .centeredHorizontally, animated: true)
                 self.selectMarker(selectedIdx: idx)
                 return true
@@ -237,8 +237,10 @@ final class HomeViewController: UIViewController {
                                             stores: storeList
         )
         storeListViewController.storeList = storeList
-        storeListViewController.modalPresentationStyle = .fullScreen
-        self.present(storeListViewController, animated: true)
+        let storeListNavigationViewController = UINavigationController(rootViewController: storeListViewController)
+        storeListNavigationViewController.modalPresentationStyle = .fullScreen
+        storeListNavigationViewController.isNavigationBarHidden = true
+        self.present(storeListNavigationViewController, animated: true)
     }
     
     // MARK: - configure
