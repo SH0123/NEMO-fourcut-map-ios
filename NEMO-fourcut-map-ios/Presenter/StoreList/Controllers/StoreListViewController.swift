@@ -177,7 +177,7 @@ final class StoreListViewController: UIViewController {
         }
         
         turnToMapButton.snp.makeConstraints {
-            $0.bottom.equalTo(safeAreaLayoutGuide).offset(-16)
+            $0.bottom.equalTo(safeAreaLayoutGuide).offset(-30)
             $0.width.equalTo(90)
             $0.height.equalTo(40)
             $0.centerX.equalToSuperview()
@@ -225,10 +225,11 @@ extension StoreListViewController: UICollectionViewDelegate {
 
 extension StoreListViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let store = filteredStoreList[indexPath.row]
-        detailStoreViewController.store = store
-        //self.navigationController?.isNavigationBarHidden = false
-        self.navigationController?.pushViewController(detailStoreViewController, animated: true)
+        if !filteredStoreList.isEmpty {
+            let store = filteredStoreList[indexPath.row]
+            detailStoreViewController.store = store
+            self.navigationController?.pushViewController(detailStoreViewController, animated: true)
+        }
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {

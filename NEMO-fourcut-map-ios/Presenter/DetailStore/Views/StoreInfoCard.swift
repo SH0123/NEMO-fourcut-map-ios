@@ -9,14 +9,18 @@ import Foundation
 import UIKit
 import SnapKit
 
+protocol clickCopyButtonDelegate: AnyObject {
+    func copyAddress() -> Void
+}
+
 final class StoreInfoCard: UIView {
     
     var store: FourcutStore? {
         didSet {
-            print(store)
             setContents(store: store)
         }
     }
+    weak var delegate: clickCopyButtonDelegate?
     
     private let infoCardView: UIView = {
         let view = UIView()
@@ -46,9 +50,10 @@ final class StoreInfoCard: UIView {
         button.setTitle("주소복사", for: .normal)
         button.setTitleColor(.brandPink, for: .normal)
         button.titleLabel?.font = UIFont.contentsDefaultAccent
+        button.addTarget(self, action: #selector(copyAddress), for: .touchUpInside)
         return button
     }()
-    
+
     private let starImage: UIImageView = {
         let imageView = UIImageView()
         imageView.image = ImageLiterals.starWithRound
@@ -145,6 +150,14 @@ final class StoreInfoCard: UIView {
         storeNameLabel.text = store.placeName
         storeLocationAddressLabel.text = store.addressName
         distanceLabel.text = store.stringDistanceWithKm
+    }
+    
+    // MARK: - objc function
+    
+    @objc private func copyAddress() {
+        guard let store = store else { return }
+        UIPasteboard.general.string = store.addressName
+        delegate?.copyAddress()
     }
     
     // MARK: - configure

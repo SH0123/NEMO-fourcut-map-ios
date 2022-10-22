@@ -268,7 +268,7 @@ final class HomeViewController: UIViewController {
         }
         
         addressButton.snp.makeConstraints {
-            $0.top.equalTo(view.safeAreaLayoutGuide).offset(16)
+            $0.top.equalTo(view.safeAreaLayoutGuide)
             $0.left.right.equalToSuperview().inset(Size.layoutInset)
             $0.height.equalTo(50)
         }

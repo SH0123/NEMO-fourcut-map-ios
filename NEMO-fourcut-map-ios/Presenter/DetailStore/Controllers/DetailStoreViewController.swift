@@ -34,7 +34,10 @@ final class DetailStoreViewController: UIViewController {
         label.font = UIFont.contentsAccent
         label.backgroundColor = .brandPink
         label.textColor = .white
+        label.layer.masksToBounds = true
         label.layer.cornerRadius = 10
+        label.textAlignment = .center
+        label.alpha = 0
         return label
     }()
     
@@ -61,6 +64,7 @@ final class DetailStoreViewController: UIViewController {
         configureUI()
         configureAddSubviews()
         configureConstraints()
+        configureDelegate()
     }
     
     // MARK: - function
@@ -70,6 +74,10 @@ final class DetailStoreViewController: UIViewController {
     }
     
     // MARK: - configure
+    
+    private func configureDelegate() {
+        infoCard.delegate = self
+    }
     
     private func configureUI() {
         view.backgroundColor = .background
@@ -99,6 +107,31 @@ final class DetailStoreViewController: UIViewController {
             $0.top.equalTo(mapView.snp.bottom).offset(-44)
             $0.leading.trailing.equalToSuperview().inset(Size.sidePadding)
             $0.height.equalTo(160)
+        }
+        
+        copyToastMessage.snp.makeConstraints {
+            $0.centerX.equalToSuperview()
+            $0.top.equalTo(infoCard.snp.bottom).offset(16)
+            $0.width.equalTo(200)
+            $0.height.equalTo(30)
+        }
+    }
+}
+
+
+// MARK: - delegate
+
+extension DetailStoreViewController: clickCopyButtonDelegate {
+    func copyAddress() {
+        UIView.animate(withDuration: 1.0,
+                       animations: {
+            self.copyToastMessage.alpha = 1
+        }) { _ in
+            UIView.animate(withDuration: 0.5,
+                           animations: {
+                self.copyToastMessage.alpha = 0
+            })
+            
         }
     }
 }
