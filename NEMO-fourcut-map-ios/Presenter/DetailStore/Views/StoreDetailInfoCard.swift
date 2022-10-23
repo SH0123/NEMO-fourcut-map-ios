@@ -27,7 +27,12 @@ final class StoreDetailInfoCard: UIView {
     private let disneyThemaStack = StoreDetailContentsStack(labelText: "디즈니 테마 프레임")
     
     private lazy var cardStack: UIStackView = {
-        let stackView = UIStackView()
+        let stackView = UIStackView(arrangedSubviews: [remoteControllerStack,
+                                                      qrStack,
+                                                      cardPaymentStack,
+                                                      toolsStack,
+                                                      seasonThemaStack,
+                                                      disneyThemaStack])
         stackView.axis = .vertical
         stackView.distribution = .fill
         stackView.alignment = .fill
@@ -61,7 +66,7 @@ final class StoreDetailInfoCard: UIView {
         
         cardStack.snp.makeConstraints {
             $0.leading.trailing.equalToSuperview().inset(16)
-            $0.top.bottom.equalToSuperview().inset(8)
+            $0.top.bottom.equalToSuperview().inset(16)
         }
     }
 }

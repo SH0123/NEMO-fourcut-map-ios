@@ -115,6 +115,21 @@ final class DetailStoreViewController: UIViewController {
             $0.width.equalTo(200)
             $0.height.equalTo(30)
         }
+        
+        storeInfoLabel.snp.makeConstraints {
+            $0.leading.equalToSuperview().inset(Size.sidePadding)
+            $0.top.equalTo(copyToastMessage.snp.bottom).offset(16)
+        }
+        
+        updateInfoLabel.snp.makeConstraints {
+            $0.centerY.equalTo(storeInfoLabel.snp.centerY)
+            $0.leading.equalTo(storeInfoLabel.snp.trailing).offset(8)
+        }
+        
+        storeDetailInfoCard.snp.makeConstraints {
+            $0.top.equalTo(storeInfoLabel.snp.bottom).offset(32)
+            $0.leading.trailing.equalToSuperview().inset(Size.sidePadding)
+        }
     }
 }
 
