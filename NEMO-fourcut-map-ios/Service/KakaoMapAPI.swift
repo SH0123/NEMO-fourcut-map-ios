@@ -24,7 +24,6 @@ extension KakaoMapAPI {
         AF.request(baseURL + path, method: method, parameters: parameters, headers: header)
             .validate(statusCode: 200 ..< 300)
             .responseDecodable(of: T.self) { response in
-                print(response)
                 guard let decodedValue = response.value else { return }
                 completionHandler(decodedValue, response.error)
             }

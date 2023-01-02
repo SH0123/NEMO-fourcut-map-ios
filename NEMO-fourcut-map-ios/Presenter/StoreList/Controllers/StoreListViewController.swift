@@ -8,39 +8,15 @@
 import UIKit
 import SnapKit
 
-class StoreListViewController: UIViewController {
-    enum Size {
-        static let sidePadding: CGFloat = 24
-    }
-    
+final class StoreListViewController: UIViewController {
+   
     var storeList: [FourcutStore] = []
     private lazy var filteredStoreList: [FourcutStore] = storeList
     private let filters: [StoreFilter] = [EmptyFilter(), LifeFourcutFilter(), HaruFilmFilter(), SelpixFilter(), PhotoSignatureFilter(), PhotoismFilter()]
     private lazy var storeNameList = filters.map { $0.filterName }
     private var selectedCategoryIdx = 0
+    private let detailStoreViewController = DetailStoreViewController()
     
-    private let addressLabel: UILabel = {
-        let label = UILabel()
-        label.text = ""
-        label.font = UIFont.contentsDefaultAccent
-        label.textColor = .customMidBlack
-        return label
-    }()
-    private let titleLabel: UILabel = {
-        let label = UILabel()
-        label.text = "우리의 추억은 여기서 네컷으로 남기는거야"
-        label.font = UIFont.contentsTitle
-        label.textColor = .customBlack
-        return label
-    }()
-    private lazy var titleStack: UIStackView = {
-        let stackView = UIStackView(arrangedSubviews: [addressLabel,
-                                                       titleLabel])
-        stackView.axis = .vertical
-        stackView.distribution = .fillProportionally
-        stackView.spacing = 5
-        return stackView
-    }()
     private let categoryCollectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
@@ -123,7 +99,7 @@ class StoreListViewController: UIViewController {
     // MARK: - function
     
     func bindingData(addressName: String, stores: [FourcutStore]) {
-        addressLabel.text = addressName
+        navigationItem.title = addressName
         storeList = stores
     }
     
@@ -166,7 +142,6 @@ class StoreListViewController: UIViewController {
     
     private func configureAddsubview() {
         view.addSubviews(
-            titleStack,
             categoryCollectionView,
             divideLine,
             buttonStackView,
@@ -178,14 +153,9 @@ class StoreListViewController: UIViewController {
     private func configureConstraints() {
         let safeAreaLayoutGuide = view.safeAreaLayoutGuide
         
-        titleStack.snp.makeConstraints {
-            $0.leading.trailing.equalToSuperview().inset(Size.sidePadding)
-            $0.top.equalTo(safeAreaLayoutGuide).offset(30)
-        }
-        
         categoryCollectionView.snp.makeConstraints {
             $0.leading.trailing.equalToSuperview()
-            $0.top.equalTo(titleStack.snp.bottom).offset(16)
+            $0.top.equalTo(safeAreaLayoutGuide).offset(8)
             $0.height.equalTo(50)
         }
         
@@ -207,7 +177,7 @@ class StoreListViewController: UIViewController {
         }
         
         turnToMapButton.snp.makeConstraints {
-            $0.bottom.equalTo(safeAreaLayoutGuide).offset(-16)
+            $0.bottom.equalTo(safeAreaLayoutGuide).offset(-30)
             $0.width.equalTo(90)
             $0.height.equalTo(40)
             $0.centerX.equalToSuperview()
@@ -255,7 +225,11 @@ extension StoreListViewController: UICollectionViewDelegate {
 
 extension StoreListViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        
+        if !filteredStoreList.isEmpty {
+            let store = filteredStoreList[indexPath.row]
+            detailStoreViewController.store = store
+            self.navigationController?.pushViewController(detailStoreViewController, animated: true)
+        }
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {

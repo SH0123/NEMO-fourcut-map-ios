@@ -10,9 +10,6 @@ import UIKit
 final class AddressTableViewCell: UITableViewCell {
     static let registerId = "AddressTableViewCell"
     static let itemHeight: CGFloat = 80
-    enum Size {
-        static let sidePadding: CGFloat = 24
-    }
     
     var locationInfo: LocationInfo? {
         didSet {
