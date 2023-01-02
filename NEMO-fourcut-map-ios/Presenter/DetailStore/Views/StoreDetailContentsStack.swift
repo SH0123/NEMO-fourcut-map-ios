@@ -50,6 +50,7 @@ final class StoreDetailContentsStack: UIStackView {
     
     private func configureUI() {
         axis = .horizontal
+        spacing = 10
         distribution = .equalSpacing
         alignment = .center
     }

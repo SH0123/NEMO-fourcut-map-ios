@@ -19,6 +19,7 @@ final class StoreDetailInfoCard: UIView {
         return view
     }()
     
+    // TODO: 아래의 stack들을 선언만 하고 infoCard에 store 정보 들어오면 propertyObserver가 관찰하고 값 넣어주는 것으로 변경
     private let remoteControllerStack = StoreDetailContentsStack(labelText: "리모컨 사용")
     private let qrStack = StoreDetailContentsStack(labelText: "QR 코드 생성")
     private let cardPaymentStack = StoreDetailContentsStack(labelText: "카드 결제")

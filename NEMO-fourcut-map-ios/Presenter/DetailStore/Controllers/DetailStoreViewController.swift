@@ -19,6 +19,14 @@ final class DetailStoreViewController: UIViewController {
         }
     }
     
+    private let detailStoreScrollView: UIScrollView = {
+        let view = UIScrollView()
+        view.showsVerticalScrollIndicator = false
+        return view
+    }()
+    
+    private let contentView = UIView()
+    
     private let mapView: NMFMapView = {
         let mapView = NMFMapView()
         mapView.zoomLevel = 14
@@ -59,6 +67,76 @@ final class DetailStoreViewController: UIViewController {
     
     private let storeDetailInfoCard = StoreDetailInfoCard()
     
+    private let qrInfoLabel: UILabel = {
+        let label = UILabel()
+        label.textColor = .customBlack
+        label.font = UIFont.contentsDefaultAccent
+        label.text = "QR 동영상 방식"
+        return label
+    }()
+    
+    private let qrInfoCard: UIView = {
+        let view = UIView()
+        view.backgroundColor = .white
+        view.layer.cornerRadius = 10
+        view.layer.borderColor = UIColor.customGray?.cgColor
+        view.layer.borderWidth = 1
+        return view
+    }()
+    
+    private let qrInfo: UILabel = {
+        let label = UILabel()
+        label.numberOfLines = 0
+        label.font = UIFont.contentsDefault
+        label.text = "아직 등록된 정보가 없습니다"
+        label.textColor = .darkGray
+        return label
+    }()
+    
+    private let retakeInfoLabel: UILabel = {
+        let label = UILabel()
+        label.textColor = .customBlack
+        label.font = UIFont.contentsDefaultAccent
+        label.text = "재촬영 방식"
+        return label
+    }()
+    
+    private let retakeInfoCard: UIView = {
+        let view = UIView()
+        view.backgroundColor = .white
+        view.layer.cornerRadius = 10
+        view.layer.borderColor = UIColor.customGray?.cgColor
+        view.layer.borderWidth = 1
+        return view
+    }()
+    
+    private let retakeInfo: UILabel = {
+        let label = UILabel()
+        label.numberOfLines = 0
+        label.font = UIFont.contentsDefault
+        label.text = "아직 등록된 정보가 없습니다"
+        label.textColor = .darkGray
+        return label
+    }()
+    
+    private lazy var infoEditButton: UIButton = {
+        var button = UIButton()
+        button.setTitle("정보 수정하기", for: .normal)
+        button.setTitleColor(.white, for: .normal)
+        button.titleLabel?.font = UIFont.contentsDefaultAccent
+        button = button.setButtonProperty(backgroundColor: .brandPink, radius: 15, top: 8, left: 16, bottom: 8, right: 16, alpha: 0, x: 0, y: 0, blur: 0)
+        return button
+    }()
+    
+    private lazy var reviewWriteButton: UIButton = {
+        var button = UIButton()
+        button.setTitle("후기 작성하기", for: .normal)
+        button.setTitleColor(.white, for: .normal)
+        button.titleLabel?.font = UIFont.contentsDefaultAccent
+        button = button.setButtonProperty(backgroundColor: .brandPink, radius: 15, top: 8, left: 16, bottom: 8, right: 16, alpha: 0, x: 0, y: 0, blur: 0)
+        return button
+    }()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         configureUI()
@@ -84,22 +162,41 @@ final class DetailStoreViewController: UIViewController {
     }
     
     private func configureAddSubviews() {
-        view.addSubviews(
+        view.addSubview(detailStoreScrollView)
+        detailStoreScrollView.addSubview(contentView)
+        contentView.addSubviews(
             mapView,
             infoCard,
             copyToastMessage,
             storeInfoLabel,
             updateInfoLabel,
-            storeDetailInfoCard
+            storeDetailInfoCard,
+            qrInfoLabel,
+            qrInfoCard,
+            retakeInfoLabel,
+            retakeInfoCard,
+            infoEditButton,
+            reviewWriteButton
         )
+        qrInfoCard.addSubviews(qrInfo)
+        retakeInfoCard.addSubviews(retakeInfo)
     }
     
     private func configureConstraints() {
-        let safeAreaLayout = view.safeAreaLayoutGuide
+        
+        detailStoreScrollView.snp.makeConstraints {
+            $0.leading.trailing.top.bottom.equalTo(view)
+        }
+        
+        contentView.snp.makeConstraints {
+            $0.leading.trailing.top.bottom.equalToSuperview()
+            $0.width.equalToSuperview()
+            $0.height.greaterThanOrEqualToSuperview()
+        }
         
         mapView.snp.makeConstraints {
             $0.leading.trailing.equalToSuperview()
-            $0.top.equalTo(safeAreaLayout)
+            $0.top.equalTo(contentView.snp.top)
             $0.height.equalTo(220)
         }
         
@@ -129,6 +226,41 @@ final class DetailStoreViewController: UIViewController {
         storeDetailInfoCard.snp.makeConstraints {
             $0.top.equalTo(storeInfoLabel.snp.bottom).offset(32)
             $0.leading.trailing.equalToSuperview().inset(Size.sidePadding)
+        }
+        
+        qrInfoLabel.snp.makeConstraints {
+            $0.leading.equalTo(storeInfoLabel)
+            $0.top.equalTo(storeDetailInfoCard.snp.bottom).offset(30)
+        }
+        
+        qrInfoCard.snp.makeConstraints {
+            $0.leading.trailing.equalToSuperview().inset(Size.sidePadding)
+            $0.top.equalTo(qrInfoLabel.snp.bottom).offset(8)
+        }
+        
+        qrInfo.snp.makeConstraints {
+            $0.leading.trailing.equalToSuperview().inset(8)
+            $0.top.bottom.equalToSuperview().inset(16)
+        }
+        
+        retakeInfoLabel.snp.makeConstraints {
+            $0.leading.equalTo(storeInfoLabel)
+            $0.top.equalTo(qrInfoCard.snp.bottom).offset(30)
+        }
+        
+        retakeInfoCard.snp.makeConstraints {
+            $0.leading.trailing.equalToSuperview().inset(Size.sidePadding)
+            $0.top.equalTo(retakeInfoLabel.snp.bottom).offset(8)
+        }
+        
+        retakeInfo.snp.makeConstraints {
+            $0.leading.trailing.equalToSuperview().inset(8)
+            $0.top.bottom.equalToSuperview().inset(16)
+        }
+        
+        infoEditButton.snp.makeConstraints {
+            $0.trailing.equalTo(storeDetailInfoCard.snp.trailing)
+            $0.centerY.equalTo(storeInfoLabel)
         }
     }
 }
