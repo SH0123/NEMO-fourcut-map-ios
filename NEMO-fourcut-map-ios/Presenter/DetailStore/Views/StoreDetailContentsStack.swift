@@ -55,3 +55,16 @@ final class StoreDetailContentsStack: UIStackView {
         alignment = .center
     }
 }
+
+#if DEBUG
+import SwiftUI
+struct StoreDetailContentsStackPreview: PreviewProvider {
+    static var previews: some View {
+        VStack {
+            StoreDetailContentsStack(labelText: "리모컨사용")
+                .toPreview()
+                .frame(width: UIScreen.main.bounds.width - 32, height: 200)
+        }
+    }
+}
+#endif
