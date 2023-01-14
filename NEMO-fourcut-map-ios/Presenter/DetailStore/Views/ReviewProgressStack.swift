@@ -28,7 +28,7 @@ final class ReviewProgressStack: UIStackView {
                      tintColor: UIColor?,
                      trackColor: UIColor?,
                      scale: CGFloat = 1,
-                     percentage: Float) {
+                     percentage: Float = 10) {
         self.init(frame: .zero)
         setPaddingLabel(category: category)
         addSubview()
@@ -44,7 +44,6 @@ final class ReviewProgressStack: UIStackView {
                         textColor: textColor,
                         textFont: textFont)
     }
-
 }
 
 private extension ReviewProgressStack {
@@ -71,7 +70,7 @@ private extension ReviewProgressStack {
             label.text = category
             label.font = UIFont.miniSemibold
             label.textColor = .brandPink
-            label.layer.cornerRadius = 10
+            label.layer.cornerRadius = 15
             label.layer.borderWidth = 1
             label.layer.borderColor = UIColor.brandPink?.cgColor
             label.layer.masksToBounds = true
@@ -88,12 +87,12 @@ private extension ReviewProgressStack {
     func setProgressView(tintColor: UIColor?, trackColor: UIColor?, percentage: Float, scale: CGFloat) {
         progressView.tintColor = tintColor
         progressView.trackTintColor = trackColor
-        progressView.progress = percentage / 100
+        progressView.progress = percentage
         progressView.transform = progressView.transform.scaledBy(x: 1, y: scale)
     }
     
     func setPercentageLabel(text: Float, textColor: UIColor?, textFont: UIFont?) {
-        percentageLabel.text = "\(Int(text))%"
+        percentageLabel.text = "\(Int(text) * 10)%"
         percentageLabel.textColor = textColor
         percentageLabel.font = textFont
     }

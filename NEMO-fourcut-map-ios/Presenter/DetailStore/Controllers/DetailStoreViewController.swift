@@ -137,6 +137,66 @@ final class DetailStoreViewController: UIViewController {
         return button
     }()
     
+    private let reviewLabel: UILabel = {
+        let label = UILabel()
+        label.text = "후기"
+        label.textColor = .customBlack
+        label.font = UIFont.contentsTitle
+        return label
+    }()
+    
+    private let reviewSummaryContainer: UIView = {
+        let view = UIView()
+        view.backgroundColor = .white
+        view.layer.cornerRadius = 10
+        view.layer.borderColor = UIColor.customGray?.cgColor
+        view.layer.borderWidth = 1
+        return view
+    }()
+
+    private let reviewSummaryLabel: UILabel = {
+        let label = UILabel()
+        label.text = "리뷰 요약"
+        label.textColor = .customBlack
+        label.font = UIFont.contentsAccent
+        return label
+    }()
+    
+    private let reviewSummaryStar: UIImageView = {
+        let imageView = UIImageView()
+        imageView.image = ImageLiterals.filledStar
+        imageView.tintColor = .brandPink
+        return imageView
+    }()
+    
+    private let reviewSummaryRating: UILabel = {
+        let label = UILabel()
+        label.text = "5.0점"
+        label.textColor = .customBlack
+        label.font = UIFont.contentsAccent
+        return label
+    }()
+    
+    private lazy var reviewSummaryRatingStack: UIStackView = {
+        let stackView = UIStackView()
+        return stackView
+    }()
+    
+    private let reviewFirst: ReviewProgressStack = .init("조명", feelingLabel: "만족스러워요", textColor: .customBlack, textFont: .miniSemibold, tintColor: .brandPink, trackColor: .darkGray)
+    
+    private let reviewSecond: ReviewProgressStack = .init("보정", feelingLabel: "만족스러워요", textColor: .customBlack, textFont: .miniSemibold, tintColor: .brandPink, trackColor: .darkGray)
+    
+    private let reviewThird: ReviewProgressStack = .init("청결", feelingLabel: "깔끔,쾌적해요", textColor: .customBlack, textFont: .miniSemibold, tintColor: .brandPink, trackColor: .darkGray)
+    
+    private lazy var reviewSummaryStack: UIStackView = {
+        let stack = UIStackView(arrangedSubviews: [reviewFirst, reviewSecond, reviewThird])
+        stack.axis = .vertical
+        stack.distribution = .fillEqually
+        stack.spacing = 10
+        stack.alignment = .fill
+        return stack
+    }()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         configureUI()
@@ -176,22 +236,26 @@ final class DetailStoreViewController: UIViewController {
             retakeInfoLabel,
             retakeInfoCard,
             infoEditButton,
-            reviewWriteButton
+            reviewWriteButton,
+            reviewLabel,
+            reviewSummaryContainer
         )
         qrInfoCard.addSubviews(qrInfo)
         retakeInfoCard.addSubviews(retakeInfo)
+        reviewSummaryContainer.addSubviews(reviewSummaryLabel,
+                                            reviewSummaryStack)
     }
     
     private func configureConstraints() {
         
         detailStoreScrollView.snp.makeConstraints {
-            $0.leading.trailing.top.bottom.equalTo(view)
+            $0.edges.equalToSuperview()
         }
         
         contentView.snp.makeConstraints {
-            $0.leading.trailing.top.bottom.equalToSuperview()
-            $0.width.equalToSuperview()
-            $0.height.greaterThanOrEqualToSuperview()
+            $0.edges.equalToSuperview()
+            $0.width.equalTo(detailStoreScrollView.snp.width)
+            $0.height.greaterThanOrEqualTo(detailStoreScrollView.snp.height).priority(.low)
         }
         
         mapView.snp.makeConstraints {
@@ -244,7 +308,7 @@ final class DetailStoreViewController: UIViewController {
         }
         
         retakeInfoLabel.snp.makeConstraints {
-            $0.leading.equalTo(storeInfoLabel)
+            $0.leading.equalTo(storeInfoLabel.snp.leading)
             $0.top.equalTo(qrInfoCard.snp.bottom).offset(30)
         }
         
@@ -261,6 +325,27 @@ final class DetailStoreViewController: UIViewController {
         infoEditButton.snp.makeConstraints {
             $0.trailing.equalTo(storeDetailInfoCard.snp.trailing)
             $0.centerY.equalTo(storeInfoLabel)
+        }
+        
+        reviewLabel.snp.makeConstraints {
+            $0.leading.equalTo(storeInfoLabel.snp.leading)
+            $0.top.equalTo(retakeInfoCard.snp.bottom).offset(40)
+        }
+        
+        reviewSummaryContainer.snp.makeConstraints {
+            $0.leading.trailing.equalToSuperview().inset(Size.sidePadding)
+            $0.top.equalTo(reviewLabel.snp.bottom).offset(16)
+        }
+        
+        reviewSummaryLabel.snp.makeConstraints {
+            $0.top.equalToSuperview().offset(16)
+            $0.leading.equalToSuperview().inset(10)
+        }
+        
+        reviewSummaryStack.snp.makeConstraints {
+            $0.top.equalTo(reviewSummaryLabel.snp.bottom).offset(24)
+            $0.leading.trailing.equalToSuperview().inset(16)
+            $0.bottom.equalToSuperview().offset(-60)
         }
     }
 }
