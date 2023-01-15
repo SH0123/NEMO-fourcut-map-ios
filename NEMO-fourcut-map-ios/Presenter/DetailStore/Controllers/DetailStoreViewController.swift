@@ -251,11 +251,10 @@ final class DetailStoreViewController: UIViewController {
         detailStoreScrollView.snp.makeConstraints {
             $0.edges.equalToSuperview()
         }
-        
+
         contentView.snp.makeConstraints {
-            $0.edges.equalToSuperview()
-            $0.width.equalTo(detailStoreScrollView.snp.width)
-            $0.height.greaterThanOrEqualTo(detailStoreScrollView.snp.height).priority(.low)
+            $0.centerX.top.bottom.equalToSuperview()
+            $0.width.equalToSuperview()
         }
         
         mapView.snp.makeConstraints {
@@ -335,6 +334,8 @@ final class DetailStoreViewController: UIViewController {
         reviewSummaryContainer.snp.makeConstraints {
             $0.leading.trailing.equalToSuperview().inset(Size.sidePadding)
             $0.top.equalTo(reviewLabel.snp.bottom).offset(16)
+            // TODO: 추가 공부
+            $0.bottom.equalToSuperview() // 이 부분을 해주지 않아서 scroll이 영역을 잡지 못했음. 추가 공부 필요
         }
         
         reviewSummaryLabel.snp.makeConstraints {
