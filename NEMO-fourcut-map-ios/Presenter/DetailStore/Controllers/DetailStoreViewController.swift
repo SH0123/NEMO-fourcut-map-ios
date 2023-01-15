@@ -339,14 +339,14 @@ final class DetailStoreViewController: UIViewController {
         }
         
         reviewSummaryLabel.snp.makeConstraints {
-            $0.top.equalToSuperview().offset(16)
+            $0.top.equalToSuperview().offset(27)
             $0.leading.equalToSuperview().inset(10)
         }
         
         reviewSummaryStack.snp.makeConstraints {
             $0.top.equalTo(reviewSummaryLabel.snp.bottom).offset(24)
             $0.leading.trailing.equalToSuperview().inset(16)
-            $0.bottom.equalToSuperview().offset(-60)
+            $0.bottom.equalToSuperview().offset(-40)
         }
     }
 }
