@@ -92,7 +92,7 @@ private extension ReviewProgressStack {
     }
     
     func setPercentageLabel(text: Float, textColor: UIColor?, textFont: UIFont?) {
-        percentageLabel.text = "\(Int(text) * 10)%"
+        percentageLabel.text = "\(Int(Float(text) * 10))%"
         percentageLabel.textColor = textColor
         percentageLabel.font = textFont
     }
@@ -103,16 +103,16 @@ import SwiftUI
 struct ReviewProgressStackPreview: PreviewProvider {
     static var previews: some View {
         VStack {
-            ReviewProgressStack(feelingLabel: "만족스러워요", textColor: .brandPink, textFont: UIFont.mini, tintColor: .brandPink, trackColor: .darkGray, scale: 1, percentage: 88)
+            ReviewProgressStack(feelingLabel: "만족스러워요", textColor: .brandPink, textFont: UIFont.mini, tintColor: .brandPink, trackColor: .darkGray, scale: 1, percentage: 8.8)
                 .toPreview()
                 .frame(width: UIScreen.main.bounds.width - 32, height: 25)
-            ReviewProgressStack(feelingLabel: "만족스러워요", textColor: .customMidBlack, textFont: UIFont.mini, tintColor: .customMidBlack, trackColor: .darkGray, scale: 1, percentage: 30)
+            ReviewProgressStack(feelingLabel: "만족스러워요", textColor: .customMidBlack, textFont: UIFont.mini, tintColor: .customMidBlack, trackColor: .darkGray, scale: 1, percentage: 3)
                 .toPreview()
                 .frame(width: UIScreen.main.bounds.width - 32, height: 25)
-            ReviewProgressStack(feelingLabel: "만족스러워요", textColor: .customBlack, textFont: UIFont.miniSemibold, tintColor: .darkGray, trackColor: .darkGray, scale: 0.5, percentage: 30)
+            ReviewProgressStack(feelingLabel: "만족스러워요", textColor: .customBlack, textFont: UIFont.miniSemibold, tintColor: .darkGray, trackColor: .darkGray, scale: 0.5, percentage: 3)
                 .toPreview()
                 .frame(width: UIScreen.main.bounds.width - 32, height: 25)
-            ReviewProgressStack("조명", feelingLabel: "만족스러워요", textColor: .customBlack, textFont: UIFont.miniSemibold, tintColor: .brandPink, trackColor: .darkGray, scale: 1, percentage: 30)
+            ReviewProgressStack("조명", feelingLabel: "만족스러워요", textColor: .customBlack, textFont: UIFont.miniSemibold, tintColor: .brandPink, trackColor: .darkGray, scale: 1, percentage: 3)
                 .toPreview()
                 .frame(width: UIScreen.main.bounds.width - 32, height: 25)
         }
