@@ -61,6 +61,7 @@ private extension SelectButtonStackView {
         var configuration = UIButton.Configuration.plain()
         var title = AttributedString.init("가능")
         title.font = UIFont.contentsAccent
+        title.foregroundColor = .customBlack
         configuration.attributedTitle = title
         configuration.imagePadding = 15
         configuration.baseForegroundColor = .customBlack
@@ -68,8 +69,10 @@ private extension SelectButtonStackView {
             switch $0.state {
             case .selected:
                 $0.configuration?.image = ImageLiterals.filledCheckSquare
+                $0.configuration?.imageColorTransformer = .init {_ in UIColor.brandPink! }
             default:
                 $0.configuration?.image = ImageLiterals.emptyCheckSquare
+                $0.configuration?.imageColorTransformer = .init {_ in UIColor.customBlack! }
             }
         }
         possibleButton.configuration = configuration
@@ -82,6 +85,7 @@ private extension SelectButtonStackView {
         var configuration = UIButton.Configuration.plain()
         var title = AttributedString.init("불가능")
         title.font = UIFont.contentsAccent
+        title.foregroundColor = .customBlack
         configuration.attributedTitle = title
         configuration.imagePadding = 15
         configuration.baseForegroundColor = .customBlack
@@ -89,8 +93,10 @@ private extension SelectButtonStackView {
             switch $0.state {
             case .selected:
                 $0.configuration?.image = ImageLiterals.filledCheckSquare
+                $0.configuration?.imageColorTransformer = .init {_ in UIColor.brandPink! }
             default:
                 $0.configuration?.image = ImageLiterals.emptyCheckSquare
+                $0.configuration?.imageColorTransformer = .init {_ in UIColor.customBlack! }
             }
         }
         impossibleButton.configuration = configuration
