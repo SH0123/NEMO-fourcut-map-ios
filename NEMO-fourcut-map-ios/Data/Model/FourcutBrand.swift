@@ -59,6 +59,8 @@ enum FourcutBrand: Int, CaseIterable {
             return ImageLiterals.signatureNemo
         case .photoism:
             return ImageLiterals.photoismNemo
+        default:
+            return ImageLiterals.haruBlueNemo
         }
     }
 }
